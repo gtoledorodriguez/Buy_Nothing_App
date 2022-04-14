@@ -1,5 +1,10 @@
 package edu.iit.cs445.spring22;
 
-public class BoundaryInterface {
+import java.util.List;
 
+
+public interface BoundaryInterface {
+
+    List<Accounts> getAllAccounts();
+    Accounts createAccounts(Accounts il);
 }

@@ -9,47 +9,98 @@ import com.google.gson.GsonBuilder;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
-// Pingable at http://localhost:8080/rest-lamp/api/demo/lamps
+// Pingable at http://localhost:8080/bn/api/accounts
 //   bn:		the basename of the WAR file, see the gradle.build file
 //   api:			see the @ApplicationPath annotation in LampDemo.java
 //   demo:			see the @Path annotation *above* the REST_controller declaration in this file
 //   lamps:			see the @Path declaration above the first @GET in this file
 
-@Path("demo")
+@Path("api")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class REST_controller {
     private BoundaryInterface bi = new BnManager();
     
-//    @Path("/lamps")
-//    @GET
-//    public Response getAllLamps() {
-//        // calls the "Get All Lamps" use case
-//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//        String s = gson.toJson(bi.getAllLamps());
-//        return Response.status(Response.Status.OK).entity(s).build();
-//    }
-//    
-//    
-//    @Path("/lamps")
-//    @POST
-//    public Response makeLamp(@Context UriInfo uriInfo, String json) {
-//        String id;
-//        // calls the "Create Lamp" use case
-//        Gson gs = new Gson();
-//        Lamp il = gs.fromJson(json, Lamp.class);
-//        Lamp l = bi.createLamp(il);
-//        
-//        id = l.getID();
-//        Gson gson = new Gson();
-//        String s = gson.toJson(l);
-//        // Build the URI for the "Location:" header
-//        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-//        builder.path(id.toString());
-//
-//        // The response includes header and body data
-//        return Response.created(builder.build()).entity(s).build();
-//    }
+    @Path("/accounts")
+    @GET
+    public Response getAllAccounts() {
+    	if(bi.getAllAccounts().size() == 0) {
+    		String json = "{\n"
+    				+ "  \"uid\": \"\",\n"
+    				+ "  \"name\": \"Virgil Bistriceanu\",\n"
+    				+ "  \"address\": {\n"
+    				+ "    \"street\": \"10 West 31st ST\",\n"
+    				+ "    \"zip\": \"60616\"\n"
+    				+ "  },\n"
+    				+ "  \"phone\": \"312-456-7890\",\n"
+    				+ "  \"picture\": \"http://example.com/images/test-virgil.jpeg\",\n"
+    				+ "  \"is_active\": true,\n"
+    				+ "  \"date_created\": \"\"\n"
+    				+ "}";
+    		String json2 = "{\n"
+    				+ "  \"uid\": \"\",\n"
+    				+ "  \"name\": \"Jane Smith\",\n"
+    				+ "  \"address\": {\n"
+    				+ "    \"street\": \"123 2nd ST\",\n"
+    				+ "    \"zip\": \"60607\"\n"
+    				+ "  },\n"
+    				+ "  \"phone\": \"312-456-7890\",\n"
+    				+ "  \"picture\": \"http://example.com/images/jane-smith.jpeg\",\n"
+    				+ "  \"is_active\": false,\n"
+    				+ "  \"date_created\": \"\"\n"
+    				+ "}";
+    		String json3 = "{\n"
+    				+ "  \"uid\": \"\",\n"
+    				+ "  \"name\": \"CSR #1\",\n"
+    				+ "  \"address\": {\n"
+    				+ "    \"street\": \"101 W Main St.\",\n"
+    				+ "    \"zip\": \"60010\"\n"
+    				+ "  },\n"
+    				+ "  \"phone\": \"312-456-7890\",\n"
+    				+ "  \"picture\": \"http://example.com/images/test-virgil.jpeg\",\n"
+    				+ "  \"is_active\": true,\n"
+    				+ "  \"date_created\": \"\"\n"
+    				+ "}";
+    		String id;
+    		Gson gs = new Gson();
+            Accounts il = gs.fromJson(json, Accounts.class);
+            Accounts l = bi.createAccounts(il);
+            
+            Accounts il2 = gs.fromJson(json2, Accounts.class);
+            Accounts l2 = bi.createAccounts(il2);
+            
+            Accounts il3 = gs.fromJson(json3, Accounts.class);
+            Accounts l3 = bi.createAccounts(il3);
+            
+            System.out.println(bi.getAllAccounts().size());
+    	}
+        // calls the "Get All Lamps" use case
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String s = gson.toJson(bi.getAllAccounts());
+        return Response.status(Response.Status.OK).entity(s).build();
+    }
+    
+    
+    @Path("/accounts")
+    @POST
+    public Response makeAccounts(@Context UriInfo uriInfo, String json) {
+    	System.out.println("makeAccounts");
+        String id;
+        // calls the "Create Lamp" use case
+        Gson gs = new Gson();
+        Accounts il = gs.fromJson(json, Accounts.class);
+        Accounts l = bi.createAccounts(il);
+        
+        id = l.getUid();
+        Gson gson = new Gson();
+        String s = gson.toJson(l);
+        // Build the URI for the "Location:" header
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.path(id.toString());
+
+        // The response includes header and body data
+        return Response.created(builder.build()).entity(s).build();
+    }
 //
 //    @Path("/lamps/{id}")
 //    @GET
