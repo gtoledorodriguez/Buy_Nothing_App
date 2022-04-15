@@ -7,4 +7,6 @@ public interface BoundaryInterface {
 
     List<Accounts> getAllAccounts();
     Accounts createAccounts(Accounts il);
+	void replaceAccount(String lid, Accounts il);
+	Accounts getAccountDetail(String lid);
 }

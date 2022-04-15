@@ -101,12 +101,27 @@ public class REST_controller {
         // The response includes header and body data
         return Response.created(builder.build()).entity(s).build();
     }
-//
-//    @Path("/lamps/{id}")
-//    @GET
-//    public Response getSpecificLamp(@PathParam("id") String lid) {
-//        // call the "Get Lamp Detail" use case
-//        Lamp l = bi.getLampDetail(lid);
+    
+  @Path("/accounts/{uid}")
+  @PUT
+  public Response controlLamp(@PathParam("uid") String lid, String json) {
+      // call the "Update lamp" use case
+      Gson gson = new Gson();
+      Accounts il = gson.fromJson(json, Accounts.class);
+      bi.replaceAccount(lid, il);
+      //return Response.ok().build();
+      return Response.status(Response.Status.NO_CONTENT).build();
+  }
+
+    @Path("/accounts/{uid}")
+    @GET
+    public Response getSpecificLamp(@PathParam("uid") String lid) {
+        // call the "Get Lamp Detail" use case
+        Accounts l = bi.getAccountDetail(lid);
+        
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String s = gson.toJson(l);
+        return Response.ok(s).build();
 //        if (l.isNil()) {
 //            // return a 404
 //            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
@@ -115,18 +130,9 @@ public class REST_controller {
 //            String s = gson.toJson(l);
 //            return Response.ok(s).build();
 //        }
-//    }
+    }
 //
-//    @Path("/lamps/{id}")
-//    @PUT
-//    public Response controlLamp(@PathParam("id") String lid, String json) {
-//        // call the "Update lamp" use case
-//        Gson gson = new Gson();
-//        Lamp il = gson.fromJson(json, Lamp.class);
-//        bi.replaceLamp(lid, il);
-//        //return Response.ok().build();
-//        return Response.status(Response.Status.NO_CONTENT).build();
-//    }
+
 //    
 //    @Path("/lamps/{id}")
 //    @DELETE

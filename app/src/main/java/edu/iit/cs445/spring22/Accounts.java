@@ -2,6 +2,8 @@ package edu.iit.cs445.spring22;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Accounts {
@@ -12,6 +14,17 @@ public class Accounts {
 	private String picture;
 	private boolean is_active;
 	private String date_created;
+	private List<Asks> asksList= new ArrayList<Asks>();
+	
+	public Accounts() {
+		this.uid = UUID.randomUUID().toString();
+		this.name = "";
+		this.address = new Address();
+		this.phone = "";
+		this.picture = "";
+		isNotActive() ;
+		this.date_created = createDate();
+	}
 	
 	public Accounts(String name, Address address, String phone, String picture, String is_active) {
 		this.uid = UUID.randomUUID().toString();
@@ -28,7 +41,7 @@ public class Accounts {
 	}
 	
 	public Accounts(Accounts acc) {
-		//this.uid = UUID.randomUUID().toString();
+		this.uid = UUID.randomUUID().toString();
 		this.name = acc.name;
 		this.address = acc.address;
 		this.phone = acc.phone;
@@ -125,4 +138,12 @@ public class Accounts {
 	public boolean matchesUid(String uid) {
         return(uid.equals(this.uid));
     }
+
+	public List<Asks> getAsksList() {
+		return asksList;
+	}
+
+	public void setAsksList(List<Asks> asksList) {
+		this.asksList = asksList;
+	}
 }
