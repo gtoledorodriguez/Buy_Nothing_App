@@ -14,7 +14,8 @@ public class Accounts {
 	private String picture;
 	private boolean is_active;
 	private String date_created;
-	private List<Asks> asksList= new ArrayList<Asks>();
+//	private List<Asks> asksList= new ArrayList<Asks>();
+	private boolean is_Nil = false;
 	
 	public Accounts() {
 		this.uid = UUID.randomUUID().toString();
@@ -130,19 +131,23 @@ public class Accounts {
 	}
 	
 	public boolean isNil() {
-        return false;
+		//this.is_Nil = false;
+        return this.is_Nil;
     }
+	public void setIsNil(boolean nil) {
+		this.is_Nil = nil;
+	}
 	
 	
 	public boolean matchesUid(String uid) {
         return(uid.equals(this.uid));
     }
 
-	public List<Asks> getAsksList() {
-		return asksList;
-	}
-
-	public void setAsksList(List<Asks> asksList) {
-		this.asksList = asksList;
-	}
+//	public List<Asks> getAsksList() {
+//		return asksList;
+//	}
+//
+//	public void setAsksList(List<Asks> asksList) {
+//		this.asksList = asksList;
+//	}
 }

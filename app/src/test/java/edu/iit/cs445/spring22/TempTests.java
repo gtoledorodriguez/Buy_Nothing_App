@@ -2,6 +2,9 @@ package edu.iit.cs445.spring22;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -81,16 +84,26 @@ class TempTests {
             String lid4 = "";
             bi.replaceAccount(lid4, il4);
             System.out.println(bi.getAllAccounts().size());
-            int size = bi.getAllAccounts().size();
-            String uid = bi.getAllAccounts().get(size-1).getUid();
+            int size = bi.getAllAccounts().size()-1;
+            String uid = bi.getAllAccounts().get(size).getUid();
+            String date = bi.getAllAccounts().get(size).getDate_created();
+            String date2 = "31-Dec-2000";
             
-            int i = 0;
-            while(i!= bi.getAllAccounts().size()) {
-            	System.out.println(bi.getAllAccounts().get(i).getName());
-            	System.out.println(bi.getAllAccounts().get(i).getUid());
-            	System.out.println(bi.getAllAccounts().get(i).isNil());
-            	i++;
-            }
+            	
+				try {
+					Date date1;
+					date1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date);
+				
+				Date date_2;
+				
+					date_2 = new SimpleDateFormat("dd-MMM-yyyy").parse(date2);
+					System.out.println(date+"\t"+date1);  
+					System.out.println(date2+"\t"+date_2);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
             
     	}
 		assertEquals(bi.getAllAccounts().size(), 4);

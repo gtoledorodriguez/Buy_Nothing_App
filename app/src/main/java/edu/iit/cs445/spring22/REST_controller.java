@@ -1,5 +1,10 @@
 package edu.iit.cs445.spring22;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import com.google.gson.Gson;
@@ -23,7 +28,9 @@ public class REST_controller {
     
     @Path("/accounts")
     @GET
-    public Response getAllAccounts() {
+    public Response getAllAccounts(@QueryParam("key") String key,@QueryParam("start_date") String start_date,@QueryParam("end_date") String end_date) {
+    	
+    	//Preloads Data
     	if(bi.getAllAccounts().size() == 0) {
     		String json = "{\n"
     				+ "  \"uid\": \"\",\n"
@@ -74,10 +81,55 @@ public class REST_controller {
             
             System.out.println(bi.getAllAccounts().size());
     	}
+    	
+    	if(key!=null || (start_date!=null && end_date !=null)) {
+    		
+    		List<Accounts> searchAccs = new ArrayList<Accounts>();
+    		List<Accounts> allAccs = bi.getAllAccounts();
+    		
+    		for(int i = 0; i<allAccs.size();i++) {
+    			
+    			Accounts l = allAccs.get(i);
+    			String name = l.getName().toLowerCase();
+    			Address address = l.getAddress();
+    			String phone = l.getPhone().toLowerCase();
+    			String picture = l.getPicture().toLowerCase();
+    			String street = address.getStreet().toLowerCase();
+    			String zip = address.getZip().toLowerCase();
+    			String date = l.getDate_created(); 
+    			key = key.toLowerCase();
+    			
+    			if(start_date!=null && end_date!=null) {
+    				try {
+    	            	Date date1= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date);
+    					Date startDate= new SimpleDateFormat("dd-MMM-yyyy").parse(start_date);
+    					Date endDate= new SimpleDateFormat("dd-MMM-yyyy").parse(end_date);
+    					
+    					if(!(date1.before(startDate) || date1.after(endDate))) {
+    						if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
+    	        				searchAccs.add(l);
+    	        			}
+    					}
+    				} catch (ParseException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				} 
+    			}else {
+    				if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
+        				searchAccs.add(l);
+        			}
+    			}
+    			
+    		}
+    		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(searchAccs);
+    		return Response.status(Response.Status.OK).entity(s).build();
+    	}else {
         // calls the "Get All Lamps" use case
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String s = gson.toJson(bi.getAllAccounts());
         return Response.status(Response.Status.OK).entity(s).build();
+    	}
     }
     
     
@@ -129,8 +181,24 @@ public class REST_controller {
     @Path("/accounts/{uid}")
     @GET
     public Response getSpecificAccount(@PathParam("uid") String lid) {
-        // call the "Get Lamp Detail" use case
+        // call the "Get Account Detail" use case
         Accounts l = bi.getAccountDetail(lid);
+        
+        if (l.isNil()) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } else {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(l);
+            return Response.ok(s).build();
+        }
+    }
+    
+    @Path("/accounts/{uid}/activate")
+    @GET
+    public Response getActivateAccount(@PathParam("uid") String lid) {
+        // call the "Get Account Detail" use case
+        Accounts l = bi.activateAccountDetail(lid);
         
         if (l.isNil()) {
             // return a 404

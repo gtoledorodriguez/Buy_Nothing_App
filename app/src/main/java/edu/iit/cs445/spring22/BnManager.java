@@ -54,6 +54,7 @@ public class BnManager implements BoundaryInterface {
             Accounts l = li.next();
             if(l.matchesUid(lid)) {
             	System.out.println("MATCHES");
+            	l.setIsNil(false);
             	this.setInAccountsList(true);
             	return(l);
             }
@@ -65,6 +66,11 @@ public class BnManager implements BoundaryInterface {
 	
 	public Accounts getAccountDetail(String lid) {
         return(findByUid(lid));
+    }
+	public Accounts activateAccountDetail(String lid) {
+		Accounts l = findByUid(lid);
+		l.activate();
+        return l;
     }
 
 	public boolean isInAccountsList() {

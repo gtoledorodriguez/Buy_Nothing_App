@@ -10,4 +10,5 @@ public interface BoundaryInterface {
 	void replaceAccount(String lid, Accounts il);
 	Accounts getAccountDetail(String lid);
 	boolean isChangingActiveStatus();
+	Accounts activateAccountDetail(String lid);
 }
