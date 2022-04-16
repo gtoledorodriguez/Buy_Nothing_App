@@ -114,7 +114,13 @@ public class REST_controller {
       if(bi.isChangingActiveStatus()) {
     	  //return 400
     	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
-    	  return Response.status(Response.Status.BAD_REQUEST).entity("You may not use PUT to activate an account, use GET /accounts/" + lid + "/activate instead").build();
+    	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+    	  		+ "type: \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+    	  		+ "title: \"Your request data didn\\'t pass validation\",\n"
+    	  		+ "detail: \"You may not use PUT to activate an account, use GET /accounts/" + lid + "/activate instead\",\n"
+    	  		+ "status: "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+    	  		+ "instance: \"/accounts/" + lid +"\"\n"
+    	  		+ "}").build();
       }
       
       return Response.status(Response.Status.NO_CONTENT).build();
