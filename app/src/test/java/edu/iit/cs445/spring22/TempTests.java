@@ -60,17 +60,40 @@ class TempTests {
             
             Accounts il3 = gs.fromJson(json3, Accounts.class);
             Accounts l3 = bi.createAccounts(il3);
-            int i = 0;
+
             List<Accounts> accs = bi.getAllAccounts();
-            while (i != accs.size()){
-            	System.out.println(accs.get(i).getIsActive());
+            
+            //Put 
+            json = "{\n"
+            		+ "  \"uid\": \"\",\n"
+            		+ "  \"name\": \"John Smith Jr.\",\n"
+            		+ "  \"address\": {\n"
+            		+ "    \"street\": \"123 Main ST\",\n"
+            		+ "    \"zip\": \"60616\"\n"
+            		+ "  },\n"
+            		+ "  \"phone\": \"312-456-7890\",\n"
+            		+ "  \"picture\": \"http://example.com/images/john-smith.jpeg\",\n"
+            		+ "  \"is_active\": false,\n"
+            		+ "  \"date_created\": \"2122-03-13T19:01:17Z\"\n"
+            		+ "}";
+            Gson gson = new Gson();
+            Accounts il4 = gson.fromJson(json, Accounts.class);
+            String lid4 = "";
+            bi.replaceAccount(lid4, il4);
+            System.out.println(bi.getAllAccounts().size());
+            int size = bi.getAllAccounts().size();
+            String uid = bi.getAllAccounts().get(size-1).getUid();
+            
+            int i = 0;
+            while(i!= bi.getAllAccounts().size()) {
+            	System.out.println(bi.getAllAccounts().get(i).getName());
+            	System.out.println(bi.getAllAccounts().get(i).getUid());
+            	System.out.println(bi.getAllAccounts().get(i).isNil());
             	i++;
-            	
             }
             
-            System.out.println(bi.getAllAccounts().size());
     	}
-		assertEquals(bi.getAllAccounts().size(), 3);
+		assertEquals(bi.getAllAccounts().size(), 4);
 	}
 
 }

@@ -18,11 +18,6 @@ public class Accounts {
 	
 	public Accounts() {
 		this.uid = UUID.randomUUID().toString();
-		this.name = "";
-		this.address = new Address();
-		this.phone = "";
-		this.picture = "";
-		isNotActive() ;
 		this.date_created = createDate();
 	}
 	
@@ -133,6 +128,10 @@ public class Accounts {
 	public String getDate_created() {
 		return date_created;
 	}
+	
+	public boolean isNil() {
+        return false;
+    }
 	
 	
 	public boolean matchesUid(String uid) {

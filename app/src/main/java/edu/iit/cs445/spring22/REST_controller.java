@@ -104,33 +104,38 @@ public class REST_controller {
     
   @Path("/accounts/{uid}")
   @PUT
-  public Response controlLamp(@PathParam("uid") String lid, String json) {
+  public Response changeAccount(@PathParam("uid") String lid, String json) {
       // call the "Update lamp" use case
       Gson gson = new Gson();
       Accounts il = gson.fromJson(json, Accounts.class);
       bi.replaceAccount(lid, il);
       //return Response.ok().build();
+      int sizeIndex = bi.getAllAccounts().size()-1;
+      if(bi.isChangingActiveStatus()) {
+    	  //return 400
+    	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
+    	  return Response.status(Response.Status.BAD_REQUEST).entity("You may not use PUT to activate an account, use GET /accounts/" + lid + "/activate instead").build();
+      }
+      
       return Response.status(Response.Status.NO_CONTENT).build();
   }
 
     @Path("/accounts/{uid}")
     @GET
-    public Response getSpecificLamp(@PathParam("uid") String lid) {
+    public Response getSpecificAccount(@PathParam("uid") String lid) {
         // call the "Get Lamp Detail" use case
         Accounts l = bi.getAccountDetail(lid);
         
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String s = gson.toJson(l);
-        return Response.ok(s).build();
-//        if (l.isNil()) {
-//            // return a 404
-//            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
-//        } else {
-//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//            String s = gson.toJson(l);
-//            return Response.ok(s).build();
-//        }
+        if (l.isNil()) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } else {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(l);
+            return Response.ok(s).build();
+        }
     }
+    
 //
 
 //    

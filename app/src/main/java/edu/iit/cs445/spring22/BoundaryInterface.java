@@ -9,4 +9,5 @@ public interface BoundaryInterface {
     Accounts createAccounts(Accounts il);
 	void replaceAccount(String lid, Accounts il);
 	Accounts getAccountDetail(String lid);
+	boolean isChangingActiveStatus();
 }
