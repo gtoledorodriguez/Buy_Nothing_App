@@ -12,6 +12,8 @@ public interface BoundaryInterface {
 	Accounts getAccountDetail(String lid);
 	boolean isChangingActiveStatus();
 	Accounts activateAccountDetail(String lid);
+	List<Accounts> searchAccounts(String key, String start_date, String end_date);
+	void preLoadAccountsList();
 	
 	//ASKS
 	Asks createAsks(Asks il);

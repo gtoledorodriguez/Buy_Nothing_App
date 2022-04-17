@@ -35,95 +35,97 @@ public class REST_controller {
     public Response getAllAccounts(@QueryParam("key") String key,@QueryParam("start_date") String start_date,@QueryParam("end_date") String end_date) {
     	
     	//Preloads Data
-    	if(bi.getAllAccounts().size() == 0) {
-    		String json = "{\n"
-    				+ "  \"uid\": \"\",\n"
-    				+ "  \"name\": \"Virgil Bistriceanu\",\n"
-    				+ "  \"address\": {\n"
-    				+ "    \"street\": \"10 West 31st ST\",\n"
-    				+ "    \"zip\": \"60616\"\n"
-    				+ "  },\n"
-    				+ "  \"phone\": \"312-456-7890\",\n"
-    				+ "  \"picture\": \"http://example.com/images/test-virgil.jpeg\",\n"
-    				+ "  \"is_active\": true,\n"
-    				+ "  \"date_created\": \"\"\n"
-    				+ "}";
-    		String json2 = "{\n"
-    				+ "  \"uid\": \"\",\n"
-    				+ "  \"name\": \"Jane Smith\",\n"
-    				+ "  \"address\": {\n"
-    				+ "    \"street\": \"123 2nd ST\",\n"
-    				+ "    \"zip\": \"60607\"\n"
-    				+ "  },\n"
-    				+ "  \"phone\": \"312-456-7890\",\n"
-    				+ "  \"picture\": \"http://example.com/images/jane-smith.jpeg\",\n"
-    				+ "  \"is_active\": false,\n"
-    				+ "  \"date_created\": \"\"\n"
-    				+ "}";
-    		String json3 = "{\n"
-    				+ "  \"uid\": \"\",\n"
-    				+ "  \"name\": \"CSR #1\",\n"
-    				+ "  \"address\": {\n"
-    				+ "    \"street\": \"101 W Main St.\",\n"
-    				+ "    \"zip\": \"60010\"\n"
-    				+ "  },\n"
-    				+ "  \"phone\": \"312-456-7890\",\n"
-    				+ "  \"picture\": \"http://example.com/images/test-virgil.jpeg\",\n"
-    				+ "  \"is_active\": true,\n"
-    				+ "  \"date_created\": \"\"\n"
-    				+ "}";
-    		String id;
-    		Gson gs = new Gson();
-            Accounts il = gs.fromJson(json, Accounts.class);
-            Accounts l = bi.createAccounts(il);
-            
-            Accounts il2 = gs.fromJson(json2, Accounts.class);
-            Accounts l2 = bi.createAccounts(il2);
-            
-            Accounts il3 = gs.fromJson(json3, Accounts.class);
-            Accounts l3 = bi.createAccounts(il3);
-            
-            System.out.println(bi.getAllAccounts().size());
-    	}
+//    	if(bi.getAllAccounts().size() == 0) {
+//    		String json = "{\n"
+//    				+ "  \"uid\": \"\",\n"
+//    				+ "  \"name\": \"Virgil Bistriceanu\",\n"
+//    				+ "  \"address\": {\n"
+//    				+ "    \"street\": \"10 West 31st ST\",\n"
+//    				+ "    \"zip\": \"60616\"\n"
+//    				+ "  },\n"
+//    				+ "  \"phone\": \"312-456-7890\",\n"
+//    				+ "  \"picture\": \"http://example.com/images/test-virgil.jpeg\",\n"
+//    				+ "  \"is_active\": true,\n"
+//    				+ "  \"date_created\": \"\"\n"
+//    				+ "}";
+//    		String json2 = "{\n"
+//    				+ "  \"uid\": \"\",\n"
+//    				+ "  \"name\": \"Jane Smith\",\n"
+//    				+ "  \"address\": {\n"
+//    				+ "    \"street\": \"123 2nd ST\",\n"
+//    				+ "    \"zip\": \"60607\"\n"
+//    				+ "  },\n"
+//    				+ "  \"phone\": \"312-456-7890\",\n"
+//    				+ "  \"picture\": \"http://example.com/images/jane-smith.jpeg\",\n"
+//    				+ "  \"is_active\": false,\n"
+//    				+ "  \"date_created\": \"\"\n"
+//    				+ "}";
+//    		String json3 = "{\n"
+//    				+ "  \"uid\": \"\",\n"
+//    				+ "  \"name\": \"CSR #1\",\n"
+//    				+ "  \"address\": {\n"
+//    				+ "    \"street\": \"101 W Main St.\",\n"
+//    				+ "    \"zip\": \"60010\"\n"
+//    				+ "  },\n"
+//    				+ "  \"phone\": \"312-456-7890\",\n"
+//    				+ "  \"picture\": \"http://example.com/images/test-virgil.jpeg\",\n"
+//    				+ "  \"is_active\": true,\n"
+//    				+ "  \"date_created\": \"\"\n"
+//    				+ "}";
+//    		String id;
+//    		Gson gs = new Gson();
+//            Accounts il = gs.fromJson(json, Accounts.class);
+//            Accounts l = bi.createAccounts(il);
+//            
+//            Accounts il2 = gs.fromJson(json2, Accounts.class);
+//            Accounts l2 = bi.createAccounts(il2);
+//            
+//            Accounts il3 = gs.fromJson(json3, Accounts.class);
+//            Accounts l3 = bi.createAccounts(il3);
+//            
+//            System.out.println(bi.getAllAccounts().size());
+//    	}
     	
     	if(key!=null || (start_date!=null && end_date !=null)) {
     		
-    		List<Accounts> searchAccs = new ArrayList<Accounts>();
-    		List<Accounts> allAccs = bi.getAllAccounts();
+//    		List<Accounts> searchAccs = new ArrayList<Accounts>();
+//    		List<Accounts> allAccs = bi.getAllAccounts();
+//    		
+//    		for(int i = 0; i<allAccs.size();i++) {
+//    			
+//    			Accounts l = allAccs.get(i);
+//    			String name = l.getName().toLowerCase();
+//    			Address address = l.getAddress();
+//    			String phone = l.getPhone().toLowerCase();
+//    			String picture = l.getPicture().toLowerCase();
+//    			String street = address.getStreet().toLowerCase();
+//    			String zip = address.getZip().toLowerCase();
+//    			String date = l.getDate_created(); 
+//    			key = key.toLowerCase();
+//    			
+//    			if(start_date!=null && end_date!=null) {
+//    				try {
+//    	            	Date date1= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date);
+//    					Date startDate= new SimpleDateFormat("dd-MMM-yyyy").parse(start_date);
+//    					Date endDate= new SimpleDateFormat("dd-MMM-yyyy").parse(end_date);
+//    					
+//    					if(!(date1.before(startDate) || date1.after(endDate))) {
+//    						if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
+//    	        				searchAccs.add(l);
+//    	        			}
+//    					}
+//    				} catch (ParseException e) {
+//    					e.printStackTrace();
+//    				} 
+//    			}else {
+//    				if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
+//        				searchAccs.add(l);
+//        			}
+//    			}
+//    			
+//    		}
     		
-    		for(int i = 0; i<allAccs.size();i++) {
-    			
-    			Accounts l = allAccs.get(i);
-    			String name = l.getName().toLowerCase();
-    			Address address = l.getAddress();
-    			String phone = l.getPhone().toLowerCase();
-    			String picture = l.getPicture().toLowerCase();
-    			String street = address.getStreet().toLowerCase();
-    			String zip = address.getZip().toLowerCase();
-    			String date = l.getDate_created(); 
-    			key = key.toLowerCase();
-    			
-    			if(start_date!=null && end_date!=null) {
-    				try {
-    	            	Date date1= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date);
-    					Date startDate= new SimpleDateFormat("dd-MMM-yyyy").parse(start_date);
-    					Date endDate= new SimpleDateFormat("dd-MMM-yyyy").parse(end_date);
-    					
-    					if(!(date1.before(startDate) || date1.after(endDate))) {
-    						if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
-    	        				searchAccs.add(l);
-    	        			}
-    					}
-    				} catch (ParseException e) {
-    					e.printStackTrace();
-    				} 
-    			}else {
-    				if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
-        				searchAccs.add(l);
-        			}
-    			}
-    			
-    		}
+    		List<Accounts> searchAccs = bi.searchAccounts(key, start_date, end_date);
     		Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String s = gson.toJson(searchAccs);
     		return Response.status(Response.Status.OK).entity(s).build();
