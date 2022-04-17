@@ -26,6 +26,10 @@ import jakarta.ws.rs.core.*;
 public class REST_controller {
     private BoundaryInterface bi = new BnManager();
     
+/**
+ * TODO: ACCOUNTS
+ */
+    
     @Path("/accounts")
     @GET
     public Response getAllAccounts(@QueryParam("key") String key,@QueryParam("start_date") String start_date,@QueryParam("end_date") String end_date) {
@@ -111,7 +115,6 @@ public class REST_controller {
     	        			}
     					}
     				} catch (ParseException e) {
-    					// TODO Auto-generated catch block
     					e.printStackTrace();
     				} 
     			}else {
@@ -162,16 +165,15 @@ public class REST_controller {
       Accounts il = gson.fromJson(json, Accounts.class);
       bi.replaceAccount(lid, il);
       //return Response.ok().build();
-      int sizeIndex = bi.getAllAccounts().size()-1;
       if(bi.isChangingActiveStatus()) {
     	  //return 400
     	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
     	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
-    	  		+ "type: \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
-    	  		+ "title: \"Your request data didn\\'t pass validation\",\n"
-    	  		+ "detail: \"You may not use PUT to activate an account, use GET /accounts/" + lid + "/activate instead\",\n"
-    	  		+ "status: "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
-    	  		+ "instance: \"/accounts/" + lid +"\"\n"
+    	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+    	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+    	  		+ "\"detail\": \"You may not use PUT to activate an account, use GET /accounts/" + lid + "/activate instead\",\n"
+    	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+    	  		+ "\"instance\": \"/accounts/" + lid +"\"\n"
     	  		+ "}").build();
       }
       
@@ -210,7 +212,45 @@ public class REST_controller {
         }
     }
     
-//
+    /**
+     * TODO: ASKS
+     */
+    
+    @Path("/accounts/{uid}/asks")
+    @POST
+    public Response makeAsk(@Context UriInfo uriInfo, String json,@PathParam("uid") String lid) {
+    	System.out.println("makeAsks");
+    	Accounts a = bi.getAccountDetail(lid);
+    	if(!a.getIsActive()) {
+      	  //return 400
+      	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
+      	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+      	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+      	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+      	  		+ "\"detail\": \"This account " + lid + " is not active an may not create an ask.\",\n"
+      	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+      	  		+ "\"instance\": \"/accounts/" + lid +"\"\n"
+      	  		+ "}").build();
+        }
+        String id;
+        //String aid;
+        // calls the "Create Lamp" use case
+        Gson gs = new Gson();
+        Asks il = gs.fromJson(json, Asks.class);
+        Asks l = bi.createAsks(il);
+        
+        //id = l.getUid();
+        id = l.getAid();
+        Gson gson = new Gson();
+        String s = gson.toJson(l);
+        // Build the URI for the "Location:" header
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.path(id.toString());
+
+        // The response includes header and body data
+        return Response.created(builder.build()).entity(s).build();
+    }
+    
 
 //    
 //    @Path("/lamps/{id}")

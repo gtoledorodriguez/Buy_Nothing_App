@@ -22,19 +22,19 @@ public class Accounts {
 		this.date_created = createDate();
 	}
 	
-	public Accounts(String name, Address address, String phone, String picture, String is_active) {
-		this.uid = UUID.randomUUID().toString();
-		this.name = name;
-		this.address = address;
-		this.phone = phone;
-		this.picture = picture;
-		isNotActive() ;
-		if(is_active == "true") {
-			activate();
-		}
-		this.date_created = createDate();
-		
-	}
+//	public Accounts(String name, Address address, String phone, String picture, String is_active) {
+//		this.uid = UUID.randomUUID().toString();
+//		this.name = name;
+//		this.address = address;
+//		this.phone = phone;
+//		this.picture = picture;
+//		isNotActive() ;
+//		if(is_active == "true") {
+//			activate();
+//		}
+//		this.date_created = createDate();
+//		
+//	}
 	
 	public Accounts(Accounts acc) {
 		this.uid = UUID.randomUUID().toString();
@@ -66,17 +66,13 @@ public class Accounts {
         this.is_active = false;
     }
 	
-	public void updatesAccount(String name, Address address, String phone, String picture, boolean active) {
-		this.name = name;
-		this.address = address;
-		this.phone = phone;
-		this.picture = picture;
-		this.is_active = active;
-	}
-
-	public void setUid() {
-		this.uid = UUID.randomUUID().toString();
-	}
+//	public void updatesAccount(String name, Address address, String phone, String picture, boolean active) {
+//		this.name = name;
+//		this.address = address;
+//		this.phone = phone;
+//		this.picture = picture;
+//		this.is_active = active;
+//	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -96,10 +92,6 @@ public class Accounts {
 
 	public void setisActive(boolean active) {
 		this.is_active = active;
-	}
-
-	public void setDate_created() {
-		this.date_created = createDate();
 	}
 	
 	public String getUid() {

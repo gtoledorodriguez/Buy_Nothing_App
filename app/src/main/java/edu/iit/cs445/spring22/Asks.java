@@ -11,12 +11,12 @@ public class Asks {
 	private String description;
 	private String start_date;
 	private String end_date;
-	private String extra_zip;
+	private String[] extra_zip;
 	private boolean is_active;
 	private String date_created;
 
 	public Asks(Asks ask) {
-		this.uid = UUID.randomUUID().toString();
+		this.uid = ask.uid;
 		this.aid = UUID.randomUUID().toString();
 		this.type = ask.type;
 		this.description = ask.description;
@@ -75,11 +75,11 @@ public class Asks {
 		this.end_date = end_date;
 	}
 
-	public String getExtra_zip() {
+	public String[] getExtra_zip() {
 		return extra_zip;
 	}
 
-	public void setExtra_zip(String extra_zip) {
+	public void setExtra_zip(String[] extra_zip) {
 		this.extra_zip = extra_zip;
 	}
 

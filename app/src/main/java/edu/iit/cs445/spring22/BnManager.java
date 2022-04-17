@@ -10,9 +10,11 @@ import com.google.gson.Gson;
 
 public class BnManager implements BoundaryInterface {
 	private static List<Accounts> accounts = new ArrayList<Accounts>();
+	private static List<Asks> asks = new ArrayList<Asks>();
 	private boolean inAccountsList = false;
 	private boolean changingActiveStatus = false;
-
+	
+	//TODO: ACCOUNTS
 	public List<Accounts> getAllAccounts() {
 		return accounts;
 	}
@@ -26,8 +28,6 @@ public class BnManager implements BoundaryInterface {
 	public void replaceAccount(String lid, Accounts il) {
 		//Will not active account
     	Accounts l = findByUid(lid);
-    	System.out.println("Replace Account: " +l.isNil());
-    	
     	
     	l.setName(il.getName());
     	l.setAddress(il.getAddress());
@@ -40,26 +40,22 @@ public class BnManager implements BoundaryInterface {
     		this.setChangingActiveStatus(false);
     	}
     	
-    	System.out.println("inAccountList: " + this.isInAccountsList());
     	if(!isInAccountsList()) {
     		accounts.add(l);
-    		System.out.println("Replace Account: " +accounts.get(accounts.size()-1).isNil());
     	}
     }
 	
 	private Accounts findByUid(String lid) {
-    	System.out.println(lid);
+    	//System.out.println(lid);
     	Iterator<Accounts> li = accounts.listIterator();
         while(li.hasNext()) {
             Accounts l = li.next();
             if(l.matchesUid(lid)) {
-            	System.out.println("MATCHES");
             	l.setIsNil(false);
             	this.setInAccountsList(true);
             	return(l);
             }
         }
-        System.out.println("Null Account");
         this.setInAccountsList(false);
         return (new NullAccount());
     }
@@ -87,6 +83,13 @@ public class BnManager implements BoundaryInterface {
 
 	public void setChangingActiveStatus(boolean changingActiveStatus) {
 		this.changingActiveStatus = changingActiveStatus;
+	}
+
+	//TODO: ASKS
+	public Asks createAsks(Asks il) {
+		Asks l= new Asks(il);
+        asks.add(l);
+        return(l);
 	}
 
 }
