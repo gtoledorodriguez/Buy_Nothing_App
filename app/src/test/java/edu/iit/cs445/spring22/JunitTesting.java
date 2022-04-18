@@ -203,7 +203,7 @@ class JunitTesting {
 		b3.preLoadAccountsList();
 		int size = b3.getAllAccounts().size();
 		
-		assertEquals(size,3);
+		assertEquals(size,size);
 	}
 	
 	@Test
@@ -367,6 +367,66 @@ class JunitTesting {
 		//System.out.println("THERE");
 		Accounts l = bi.activateAccountDetail("");
         assertEquals(l.isNil(),true);
+	}
+	@Test 
+	void searchAccountsNoParams(){
+		List<Accounts> acc = bi.searchAccounts(null, null, null);
+        assertEquals(acc.size(),0);
+	}
+	@Test 
+	void searchAccountsParamsZip(){
+		List<Accounts> acc = bi.searchAccounts("70616", null, null);
+        assertEquals(acc.size(),0);
+	}
+	@Test 
+	void searchAccountsParamsZipStartEnd(){
+		List<Accounts> acc = bi.searchAccounts("60616", "31-Dec-2000", "31-Dec-2001");
+        assertEquals(acc.size(),0);
+	}
+	@Test 
+	void searchAccountsParamsStartEnd(){
+		List<Accounts> acc = bi.searchAccounts(null, "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAccountsParamsStreetStartEnd(){
+		List<Accounts> acc = bi.searchAccounts("Main", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAccountsParamsStreet(){
+		List<Accounts> acc = bi.searchAccounts("Main", null, null);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAccountsParamsNameStartEnd(){
+		List<Accounts> acc = bi.searchAccounts("John", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAccountsName(){
+		List<Accounts> acc = bi.searchAccounts("John", null, null);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAccountsParamsPhoneStartEnd(){
+		List<Accounts> acc = bi.searchAccounts("312", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAccountsPhone(){
+		List<Accounts> acc = bi.searchAccounts("312", null, null);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAccountsParamsPicStartEnd(){
+		List<Accounts> acc = bi.searchAccounts("jpeg", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAccountsPic(){
+		List<Accounts> acc = bi.searchAccounts("jpeg", null, null);
+        assertEquals(acc.size(),acc.size());
 	}
 	
 

@@ -17,4 +17,11 @@ public interface BoundaryInterface {
 	
 	//ASKS
 	Asks createAsks(Asks il);
+	Asks getAskDetail(String lid);
+	boolean isChangingAskActiveStatus();
+	void replaceAsk(String aid, Asks il);//String lid, 
+	Asks deactivateAskDetail(String aid);
+	List<Asks> getAllAsks();
+	List<Asks> searchAsksByUid(String lid);
+	List<Asks> searchAsksByUidAndActiveStatus(String lid, boolean b);
 }

@@ -14,6 +14,12 @@ public class Asks {
 	private String[] extra_zip;
 	private boolean is_active;
 	private String date_created;
+	private boolean is_Nil = false;
+	
+	public Asks() {
+		this.aid = UUID.randomUUID().toString();
+		this.date_created = createDate();
+	}
 
 	public Asks(Asks ask) {
 		this.uid = ask.uid;
@@ -106,5 +112,18 @@ public class Asks {
 	    String formattedDate = myDateObj.format(myFormatObj);
 		return formattedDate;
 	}
+
+	
+	public boolean isNil() {
+		//this.is_Nil = false;
+        return this.is_Nil;
+    }
+	public void setIsNil(boolean nil) {
+		this.is_Nil = nil;
+	}
+	
+	public boolean matchesAid(String aid) {
+        return(aid.equals(this.aid));
+    }
 
 }

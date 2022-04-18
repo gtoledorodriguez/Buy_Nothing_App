@@ -34,96 +34,7 @@ public class REST_controller {
     @GET
     public Response getAllAccounts(@QueryParam("key") String key,@QueryParam("start_date") String start_date,@QueryParam("end_date") String end_date) {
     	
-    	//Preloads Data
-//    	if(bi.getAllAccounts().size() == 0) {
-//    		String json = "{\n"
-//    				+ "  \"uid\": \"\",\n"
-//    				+ "  \"name\": \"Virgil Bistriceanu\",\n"
-//    				+ "  \"address\": {\n"
-//    				+ "    \"street\": \"10 West 31st ST\",\n"
-//    				+ "    \"zip\": \"60616\"\n"
-//    				+ "  },\n"
-//    				+ "  \"phone\": \"312-456-7890\",\n"
-//    				+ "  \"picture\": \"http://example.com/images/test-virgil.jpeg\",\n"
-//    				+ "  \"is_active\": true,\n"
-//    				+ "  \"date_created\": \"\"\n"
-//    				+ "}";
-//    		String json2 = "{\n"
-//    				+ "  \"uid\": \"\",\n"
-//    				+ "  \"name\": \"Jane Smith\",\n"
-//    				+ "  \"address\": {\n"
-//    				+ "    \"street\": \"123 2nd ST\",\n"
-//    				+ "    \"zip\": \"60607\"\n"
-//    				+ "  },\n"
-//    				+ "  \"phone\": \"312-456-7890\",\n"
-//    				+ "  \"picture\": \"http://example.com/images/jane-smith.jpeg\",\n"
-//    				+ "  \"is_active\": false,\n"
-//    				+ "  \"date_created\": \"\"\n"
-//    				+ "}";
-//    		String json3 = "{\n"
-//    				+ "  \"uid\": \"\",\n"
-//    				+ "  \"name\": \"CSR #1\",\n"
-//    				+ "  \"address\": {\n"
-//    				+ "    \"street\": \"101 W Main St.\",\n"
-//    				+ "    \"zip\": \"60010\"\n"
-//    				+ "  },\n"
-//    				+ "  \"phone\": \"312-456-7890\",\n"
-//    				+ "  \"picture\": \"http://example.com/images/test-virgil.jpeg\",\n"
-//    				+ "  \"is_active\": true,\n"
-//    				+ "  \"date_created\": \"\"\n"
-//    				+ "}";
-//    		String id;
-//    		Gson gs = new Gson();
-//            Accounts il = gs.fromJson(json, Accounts.class);
-//            Accounts l = bi.createAccounts(il);
-//            
-//            Accounts il2 = gs.fromJson(json2, Accounts.class);
-//            Accounts l2 = bi.createAccounts(il2);
-//            
-//            Accounts il3 = gs.fromJson(json3, Accounts.class);
-//            Accounts l3 = bi.createAccounts(il3);
-//            
-//            System.out.println(bi.getAllAccounts().size());
-//    	}
-    	
     	if(key!=null || (start_date!=null && end_date !=null)) {
-    		
-//    		List<Accounts> searchAccs = new ArrayList<Accounts>();
-//    		List<Accounts> allAccs = bi.getAllAccounts();
-//    		
-//    		for(int i = 0; i<allAccs.size();i++) {
-//    			
-//    			Accounts l = allAccs.get(i);
-//    			String name = l.getName().toLowerCase();
-//    			Address address = l.getAddress();
-//    			String phone = l.getPhone().toLowerCase();
-//    			String picture = l.getPicture().toLowerCase();
-//    			String street = address.getStreet().toLowerCase();
-//    			String zip = address.getZip().toLowerCase();
-//    			String date = l.getDate_created(); 
-//    			key = key.toLowerCase();
-//    			
-//    			if(start_date!=null && end_date!=null) {
-//    				try {
-//    	            	Date date1= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date);
-//    					Date startDate= new SimpleDateFormat("dd-MMM-yyyy").parse(start_date);
-//    					Date endDate= new SimpleDateFormat("dd-MMM-yyyy").parse(end_date);
-//    					
-//    					if(!(date1.before(startDate) || date1.after(endDate))) {
-//    						if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
-//    	        				searchAccs.add(l);
-//    	        			}
-//    					}
-//    				} catch (ParseException e) {
-//    					e.printStackTrace();
-//    				} 
-//    			}else {
-//    				if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
-//        				searchAccs.add(l);
-//        			}
-//    			}
-//    			
-//    		}
     		
     		List<Accounts> searchAccs = bi.searchAccounts(key, start_date, end_date);
     		Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -251,6 +162,85 @@ public class REST_controller {
 
         // The response includes header and body data
         return Response.created(builder.build()).entity(s).build();
+    }
+    
+    @Path("/asks/{aid}")
+    @GET
+    public Response getSpecificAsk(@PathParam("aid") String lid) {
+        // call the "Get Account Detail" use case
+    	Asks l = bi.getAskDetail(lid);
+        //Accounts l = bi.getAccountDetail(lid);
+        
+        if (l.isNil()) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } else {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(l);
+            return Response.ok(s).build();
+        }
+    }
+    
+    @Path("/accounts/{uid}/asks/{aid}")
+    @PUT
+    public Response changeAsk(@PathParam("uid") String lid,@PathParam("aid") String aid, String json) {
+        // call the "Update lamp" use case
+        Gson gson = new Gson();
+        Asks il = gson.fromJson(json, Asks.class);
+        bi.replaceAsk(aid,il);//lid, 
+        //return Response.ok().build();
+        if(bi.isChangingAskActiveStatus()) {
+      	  //return 400
+      	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
+      	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+      	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+      	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+      	  		+ "\"detail\": \"You may not use PUT to deactivate an ask, use GET /accounts/" + lid + "/asks/"+aid+"/deactivate instead\",\n"
+      	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+      	  		+ "\"instance\": \"/accounts/" + lid + "/asks/"+aid+"\"\n"
+      	  		+ "}").build();
+        }
+        
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+    
+    @Path("/accounts/{uid}/asks/{aid}/deactivate")
+    @GET
+    public Response getDeactivateAsk(@PathParam("uid") String lid,@PathParam("aid") String aid) {
+        // call the "Get Account Detail" use case
+        Asks l = bi.deactivateAskDetail(aid);
+        
+        if (l.isNil()) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + aid).build();
+        } else {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(l);
+            return Response.ok(s).build();
+        }
+    }
+    
+    @Path("/accounts/{uid}/asks/")
+    @GET
+    public Response getMyAsks(@PathParam("uid") String lid, @QueryParam("is_active") String is_active) {
+        // call the "Get Account Detail" use case
+    	
+        List<Asks> l;
+        boolean b;
+        if(is_active!=null) {
+        	b = Boolean.parseBoolean(is_active);
+        	
+        }else {
+        	b = false;
+        }
+        l = bi.searchAsksByUidAndActiveStatus(lid,b);//else {
+//        	l = bi.searchAsksByUid(lid);
+//        }
+        //l = bi.getAllAsks();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String s = gson.toJson(l);
+        return Response.ok(s).build();
+        
     }
     
 

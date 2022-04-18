@@ -15,7 +15,9 @@ public class BnManager implements BoundaryInterface {
 	private static List<Accounts> accounts = new ArrayList<Accounts>();
 	private static List<Asks> asks = new ArrayList<Asks>();
 	private boolean inAccountsList = false;
+	private boolean inAsksList = false;
 	private boolean changingActiveStatus = false;
+	private boolean changingAskActiveStatus = false;
 	
 	//TODO: ACCOUNTS
 	public void preLoadAccountsList() {
@@ -156,8 +158,10 @@ public class BnManager implements BoundaryInterface {
 			String picture = l.getPicture().toLowerCase();
 			String street = address.getStreet().toLowerCase();
 			String zip = address.getZip().toLowerCase();
-			String date = l.getDate_created(); 
-			key = key.toLowerCase();
+			String date = l.getDate_created();
+			if(key!=null) {
+				key = key.toLowerCase();
+			}
 			
 			if(start_date!=null && end_date!=null) {
 				try {
@@ -165,16 +169,18 @@ public class BnManager implements BoundaryInterface {
 					Date startDate= new SimpleDateFormat("dd-MMM-yyyy").parse(start_date);
 					Date endDate= new SimpleDateFormat("dd-MMM-yyyy").parse(end_date);
 					
-					if(!(date1.before(startDate) || date1.after(endDate))) {
+					if((!(date1.before(startDate) || date1.after(endDate))) && key!=null) {
 						if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
 	        				searchAccs.add(l);
 	        			}
+					}else if(!(date1.before(startDate) || date1.after(endDate))) {
+						searchAccs.add(l);
 					}
 				} catch (ParseException e) {
 					e.printStackTrace();
 				} 
 			}else {
-				if(name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key)) {
+				if(key!=null && (name.contains(key) || street.contains(key) || zip.contains(key)|| phone.contains(key)|| picture.contains(key))) {
     				searchAccs.add(l);
     			}
 			}
@@ -188,6 +194,104 @@ public class BnManager implements BoundaryInterface {
 		Asks l= new Asks(il);
         asks.add(l);
         return(l);
+	}
+	
+	public Asks getAskDetail(String lid) {
+		return (findByAid(lid));
+	}
+	private Asks findByAid(String lid) {
+    	//System.out.println(lid);
+    	Iterator<Asks> li = asks.listIterator();
+        while(li.hasNext()) {
+            Asks l = li.next();
+            if(l.matchesAid(lid)) {
+            	l.setIsNil(false);
+            	this.setInAsksList(true);
+            	return(l);
+            }
+        }
+        this.setInAsksList(false);
+        return (new NullAsk());
+	}
+	public boolean isChangingAskActiveStatus() {
+		return changingAskActiveStatus;
+	}
+	public void setChangingAskActiveStatus(boolean changingAskActiveStatus) {
+		this.changingAskActiveStatus = changingAskActiveStatus;
+	}
+	
+	public void replaceAsk(String aid, Asks il) {//String lid, 
+		//Will not active account
+    	Asks l = findByAid(aid);
+    	l.setUid(il.getUid());
+		l.setType(il.getType()); 
+		l.setDescription(il.getDescription());
+		l.setStart_date(il.getStart_date());
+		l.setEnd_date(il.getEnd_date());
+		l.setExtra_zip(il.getExtra_zip());
+    	
+    	if(il.isIs_active()) {
+    		this.setChangingActiveStatus(true);
+    	}else {
+    		this.setChangingActiveStatus(false);
+    	}
+    	
+    	if(!isInAsksList()) {
+    		asks.add(l);
+    	}
+		
+	}
+	public boolean isInAsksList() {
+		return inAsksList;
+	}
+	public void setInAsksList(boolean inAsksList) {
+		this.inAsksList = inAsksList;
+	}
+
+	public Asks deactivateAskDetail(String aid) {
+		Asks l = findByAid(aid);
+		l.setIs_active(false);
+        return l;
+	}
+	
+	public List<Asks> getAllAsks() {
+		return asks;
+	}
+	
+	public List<Asks> searchAsksByUid(String lid) {
+		List<Asks> searchAsks = new ArrayList<Asks>();
+		List<Asks> allAsks = this.getAllAsks();
+		
+		for(int i = 0; i<allAsks.size();i++) {
+			Asks l = allAsks.get(i);
+			if(l.getUid()==lid) {
+				searchAsks.add(l);
+			}
+		}
+		return searchAsks;
+	}
+	@Override
+	public List<Asks> searchAsksByUidAndActiveStatus(String lid, boolean b) {
+		List<Asks> searchAsks = new ArrayList<Asks>();
+		List<Asks> allAsks = this.getAllAsks();
+		
+		for(int i = 0; i<allAsks.size();i++) {
+			Asks l = allAsks.get(i);
+			if(l.getUid().equals(lid)) {
+				searchAsks.add(l);
+			}
+//			if(b) {
+//				if(l.getUid().equals(lid) && (l.isIs_active()==b)) {
+//					searchAsks.add(l);
+//				}
+//			}else {
+//				if(l.getUid().equals(lid)) {
+//					searchAsks.add(l);
+//				}
+//			}
+			
+		}
+		return searchAsks;
 	}
 
 	
