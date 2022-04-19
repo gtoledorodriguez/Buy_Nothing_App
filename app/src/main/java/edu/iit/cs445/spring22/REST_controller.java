@@ -41,10 +41,10 @@ public class REST_controller {
             String s = gson.toJson(searchAccs);
     		return Response.status(Response.Status.OK).entity(s).build();
     	}else {
-        // calls the "Get All Lamps" use case
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String s = gson.toJson(bi.getAllAccounts());
-        return Response.status(Response.Status.OK).entity(s).build();
+	        // calls the "Get All Lamps" use case
+	        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	        String s = gson.toJson(bi.getAllAccounts());
+	        return Response.status(Response.Status.OK).entity(s).build();
     	}
     }
     
@@ -234,32 +234,58 @@ public class REST_controller {
         	b = false;
         }
         l = bi.searchAsksByUidAndActiveStatus(lid,b);//else {
-//        	l = bi.searchAsksByUid(lid);
-//        }
-        //l = bi.getAllAsks();
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String s = gson.toJson(l);
+        return Response.ok(s).build();
+        
+    }
+
+    @Path("/accounts/{uid}/asks/{aid}")
+    @DELETE
+    public Response deleteAsk(@PathParam("id") String lid,@PathParam("aid") String aid) {
+        // call the "Delete Lamp" use case
+    	try {
+    		bi.deleteAsk(aid);
+    		// return a 204
+    	    return Response.status(Response.Status.NO_CONTENT).build();
+    		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            //String s = gson.toJson(l);
+            //return Response.ok(s).build();
+    	} catch (Exception e) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } 
+    }
+    
+    @Path("/asks/")
+    @GET
+    public Response getAllAsks(@QueryParam("v_by") String lid, @QueryParam("is_active") String is_active) {
+        // call the "Get Account Detail" use case
+    	
+        List<Asks> l;
+        boolean b;
+        if(is_active!=null) {
+        	b = Boolean.parseBoolean(is_active);
+        	
+        }else {
+        	b = false;
+        }
+        if(lid != null) {
+        	l = bi.searchAsksByUidAndActiveStatus(lid,b);
+        	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
+        		l = bi.getAllAsks();
+        	}
+        }else {
+        	l = bi.getAllAsks();
+        	
+        }
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String s = gson.toJson(l);
         return Response.ok(s).build();
         
     }
     
-
-//    
-//    @Path("/lamps/{id}")
-//    @DELETE
-//    public Response deleteLamp(@PathParam("id") String lid) {
-//        // call the "Delete Lamp" use case
-//    	try {
-//    		bi.deleteLamp(lid);
-//    		// return a 204
-//    	    return Response.status(Response.Status.NO_CONTENT).build();
-//    		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//            //String s = gson.toJson(l);
-//            //return Response.ok(s).build();
-//    	} catch (Exception e) {
-//            // return a 404
-//            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
-//        } 
-//    }
 }
 

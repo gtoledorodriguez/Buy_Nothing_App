@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.google.gson.Gson;
+
 
 
 
@@ -257,19 +259,7 @@ public class BnManager implements BoundaryInterface {
 	public List<Asks> getAllAsks() {
 		return asks;
 	}
-	
-	public List<Asks> searchAsksByUid(String lid) {
-		List<Asks> searchAsks = new ArrayList<Asks>();
-		List<Asks> allAsks = this.getAllAsks();
-		
-		for(int i = 0; i<allAsks.size();i++) {
-			Asks l = allAsks.get(i);
-			if(l.getUid()==lid) {
-				searchAsks.add(l);
-			}
-		}
-		return searchAsks;
-	}
+
 	@Override
 	public List<Asks> searchAsksByUidAndActiveStatus(String lid, boolean b) {
 		List<Asks> searchAsks = new ArrayList<Asks>();
@@ -277,21 +267,29 @@ public class BnManager implements BoundaryInterface {
 		
 		for(int i = 0; i<allAsks.size();i++) {
 			Asks l = allAsks.get(i);
-			if(l.getUid().equals(lid)) {
-				searchAsks.add(l);
+			if(b) {
+				if(l.getUid().equals(lid) && l.isIs_active()) {
+					searchAsks.add(l);
+				}
+			}else {
+				if(l.getUid().equals(lid)) {
+					searchAsks.add(l);
+				}
 			}
-//			if(b) {
-//				if(l.getUid().equals(lid) && (l.isIs_active()==b)) {
-//					searchAsks.add(l);
-//				}
-//			}else {
-//				if(l.getUid().equals(lid)) {
-//					searchAsks.add(l);
-//				}
-//			}
 			
 		}
 		return searchAsks;
+	}
+	@Override
+	public void deleteAsk(String lid) {
+
+    	Asks l = findByAid(lid);
+    	if (l.isNil()) {
+    		throw new NoSuchElementException();
+    	} else {
+    		asks.remove(l);
+    	}
+		
 	}
 
 	
