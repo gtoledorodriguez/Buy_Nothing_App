@@ -17,6 +17,7 @@ public class Asks {
 	private boolean is_Nil = false;
 	
 	public Asks() {
+		this.uid = "";
 		this.aid = UUID.randomUUID().toString();
 		this.date_created = createDate();
 		this.extra_zip = new String[0];

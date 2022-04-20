@@ -279,7 +279,7 @@ class JunitTesting {
 	void testGetterUidAsk() {
 		Asks a = new NullAsk();
 		a.getUid();
-		assertEquals(a.getUid(), null);
+		assertEquals(a.getUid(), "");
 	}
 	@Test
 	void testGetterAidAsk() {
@@ -688,7 +688,7 @@ class JunitTesting {
 				+ "      }";
         Asks il = gs.fromJson(json, Asks.class);
 		Asks a2 = bi.createAsks(il);
-		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), true);
+		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), "true");
 		assertEquals(a2.getUid(),"10");
 	}
 
@@ -708,7 +708,7 @@ class JunitTesting {
 				+ "      }";
         Asks il = gs.fromJson(json, Asks.class);
 		Asks a2 = bi.createAsks(il);
-		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), false);
+		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), "false");
 		assertEquals(a2.getUid(),"11");
 	}
 	

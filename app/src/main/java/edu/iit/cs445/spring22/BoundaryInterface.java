@@ -26,7 +26,7 @@ public interface BoundaryInterface {
 	Asks deactivateAskDetail(String aid);
 	List<Asks> getAllAsks();
 	List<Asks> searchAsksByUidAndActiveStatus(String lid, String b);
-	List<Asks> searchAsksByUidAndActiveStatusAndZipCodes(String lid, boolean b);
+	List<Asks> searchAsksByUidAndActiveStatusAndZipCodes(String lid, String b);
 	void deleteAsk(String lid);
 	
 	//GIVES

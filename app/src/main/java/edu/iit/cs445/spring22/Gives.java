@@ -17,6 +17,7 @@ public class Gives {
 	private boolean is_Nil = false;
 	
 	public Gives() {
+		this.uid = "";
 		this.gid = UUID.randomUUID().toString();
 		this.extra_zip = new String[0];
 		this.is_active = true;

@@ -282,10 +282,10 @@ public class REST_controller {
         	b = false;
         }
         if(lid != null) {
-        	l = bi.searchAsksByUidAndActiveStatusAndZipCodes(lid,b);
-        	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
-        		l = bi.getAllAsks();
-        	}
+        	l = bi.searchAsksByUidAndActiveStatusAndZipCodes(lid,is_active);
+//        	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
+//        		l = bi.getAllAsks();
+//        	}
         }else {
         	l = new ArrayList<Asks>();
         	return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
@@ -420,9 +420,9 @@ public class REST_controller {
         List<Gives> l;
         if(lid != null) {
         	l = bi.searchGivesByUidAndActiveStatusAndZipCodes(lid,is_active);
-        	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
-        		l = bi.getAllGives();
-        	}
+//        	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
+//        		l = bi.getAllGives();
+//        	}
         }else {
         	l = new ArrayList<Gives>();
         	return Response.status(Response.Status.BAD_REQUEST).entity("{\n"

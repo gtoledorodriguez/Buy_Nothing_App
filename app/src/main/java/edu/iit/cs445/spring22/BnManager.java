@@ -3,6 +3,7 @@ package edu.iit.cs445.spring22;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -286,48 +287,85 @@ public class BnManager implements BoundaryInterface {
 		return searchAsks;
 	}
 	
-	public List<Asks> searchAsksByUidAndActiveStatusAndZipCodes(String lid, boolean b) {
+	public List<Asks> searchAsksByUidAndActiveStatusAndZipCodes(String lid, String is_active) {
+
+		//view by user lid
 		List<Asks> searchAsks = new ArrayList<Asks>();
 		List<Asks> allAsks = this.getAllAsks();
-		List<Accounts> allAccounts = this.getAllAccounts();
-		Accounts userView = new Accounts();
-		
-		for(int i = 0; i<allAccounts.size();i++) {
-			Accounts l = allAccounts.get(i);
-			if(l.getUid().equals(lid)) {
-				userView = l;
-				break;
-			}
-			//userIDWZipCode.put(l.getUid(), l.getAddress().getZip());
-		}
-		
-		String zip = userView.getAddress().getZip();
-		
+		Accounts user = this.findByUid(lid);
+		String userZip = user.getAddress().getZip();
+
 		for(int i = 0; i<allAsks.size();i++) {
 			Asks l = allAsks.get(i);
 
-				for(int j = 0; j<l.getExtra_zip().length; j++) {
-					if(b) {
-						if(l.isIs_active() && (zip.equals(l.getExtra_zip()[j]))) {
-							searchAsks.add(l);
-						}
+			List<String> zip = new ArrayList<String>();
+			zip.addAll(Arrays.asList(l.getExtra_zip()));
+			
+			Accounts giveUser = this.findByUid(l.getUid());
+			String giveZip = giveUser.getAddress().getZip();
+			
+			if(!is_active.isEmpty()) {
+
+				if((l.isIs_active() == Boolean.parseBoolean(is_active))) {
+					
+					if(user.getUid().equals(this.getAllAccounts().get(2).getUid())) {
+						searchAsks.add(l);
 					}else {
-						if((zip.equals(l.getExtra_zip()[j]))) {
+						if(userZip.equals(giveZip) || zip.contains(userZip)) {//userZip.equals(giveZip) l.getExtra_zip().length > 0
 							searchAsks.add(l);
 						}
 					}
-//					if(b && (zip==l.getExtra_zip()[j]) && l.isIs_active()) {
-//						searchAsks.add(l);
+
+					
+
+				}
+			}else {
+				
+				if(user.getUid().equals(this.getAllAccounts().get(2).getUid())) {
+					searchAsks.add(l);
+				}else {
+					if(userZip.equals(giveZip) || zip.contains(userZip)) {//userZip.equals(giveZip) l.getExtra_zip().length > 0
+						searchAsks.add(l);
+					}
+				}
+			}
+			
+		}
+		return searchAsks;
+//		List<Asks> searchAsks = new ArrayList<Asks>();
+//		List<Asks> allAsks = this.getAllAsks();
+//		List<Accounts> allAccounts = this.getAllAccounts();
+//		Accounts userView = new Accounts();
+//		
+//		for(int i = 0; i<allAccounts.size();i++) {
+//			Accounts l = allAccounts.get(i);
+//			if(l.getUid().equals(lid)) {
+//				userView = l;
+//				break;
+//			}
+//
+//		}
+//		
+//		String zip = userView.getAddress().getZip();
+//		
+//		for(int i = 0; i<allAsks.size();i++) {
+//			Asks l = allAsks.get(i);
+//
+//				for(int j = 0; j<l.getExtra_zip().length; j++) {
+//					if(b) {
+//						if(l.isIs_active() && (zip.equals(l.getExtra_zip()[j]))) {
+//							searchAsks.add(l);
+//						}
 //					}else {
-//						if((zip==l.getExtra_zip()[j])) {
+//						if((zip.equals(l.getExtra_zip()[j]))) {
 //							searchAsks.add(l);
 //						}
 //					}
-				}
-
-
-		}
-		return searchAsks;
+//				}
+//
+//
+//		}
+//		return searchAsks;
 	}
 	@Override
 	public void deleteAsk(String lid) {
@@ -426,7 +464,6 @@ public class BnManager implements BoundaryInterface {
 		return searchGives;
 	}
 	public List<Gives> getAllGives() {
-		// TODO Auto-generated method stub
 		return gives;
 	}
 	@Override
@@ -436,36 +473,41 @@ public class BnManager implements BoundaryInterface {
 		List<Gives> allGives = this.getAllGives();
 		Accounts user = this.findByUid(lid);
 		String userZip = user.getAddress().getZip();
+
 		for(int i = 0; i<allGives.size();i++) {
 			Gives l = allGives.get(i);
-//			
-//			String[] zip = l.getExtra_zip();
-//			Accounts giveUser = this.findByUid(l.getUid());
-//			String giveZip = giveUser.getAddress().getZip();
+
+			List<String> zip = new ArrayList<String>();
+			zip.addAll(Arrays.asList(l.getExtra_zip()));
 			
-			if(is_active!=null) {
+			Accounts giveUser = this.findByUid(l.getUid());
+			String giveZip = giveUser.getAddress().getZip();
+			
+			if(!is_active.isEmpty()) {
+
 				if((l.isIs_active() == Boolean.parseBoolean(is_active))) {
-					if(l.getExtra_zip().length > 0) {//userZip.equals(giveZip)
-						searchGives.add(l);
-					}
+					//l.setDescription(l.getDescription() + ", IF = "+ (l.isIs_active() == Boolean.parseBoolean(is_active)));// == Boolean.parseBoolean(is_active)
 					
-//					for(int j = 0; j<zip.length;i++) {
-//						if(user.getAddress().getZip().equals(zip[j])) {
-//							searchGives.add(l);
-//							break;
-//						}
-//					}
+					if(user.getUid().equals(this.getAllAccounts().get(2).getUid())) {
+						searchGives.add(l);
+					}else {
+						if(userZip.equals(giveZip) || zip.contains(userZip)) {//userZip.equals(giveZip) l.getExtra_zip().length > 0
+							searchGives.add(l);
+						}
+					}
+
 				}
 			}else {
-				if(l.getExtra_zip().length > 0) {//userZip.equals(giveZip)
+				//l.setDescription(l.getDescription() + ", Else = "+ (l.isIs_active() == Boolean.parseBoolean(is_active)));
+				
+				if(user.getUid().equals(this.getAllAccounts().get(2).getUid())) {
 					searchGives.add(l);
+				}else {
+					if(userZip.equals(giveZip) || zip.contains(userZip)) { //userZip.equals(giveZip) l.getExtra_zip().length > 0
+						searchGives.add(l);
+					}
 				}
-//				for(int j = 0; j<zip.length;i++) {
-//					if(user.getAddress().getZip().equals(zip[j])) {
-//						searchGives.add(l);
-//						break;
-//					}
-//				}
+				
 			}
 			
 		}

@@ -20,6 +20,7 @@ public class Accounts {
 	public Accounts() {
 		this.uid = UUID.randomUUID().toString();
 		this.date_created = createDate();
+		this.address = new Address();
 	}
 	
 	public Accounts(Accounts acc) {
