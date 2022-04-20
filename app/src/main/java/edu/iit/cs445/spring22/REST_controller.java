@@ -307,7 +307,7 @@ public class REST_controller {
     /**
      * TODO: GIVES
      */
-    @Path("/accounts/{uid}/asks")
+    @Path("/accounts/{uid}/gives")
     @POST
     public Response makeGive(@Context UriInfo uriInfo, String json,@PathParam("uid") String lid) {
     	System.out.println("makeGive");
@@ -318,20 +318,19 @@ public class REST_controller {
       	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
       	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
       	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
-      	  		+ "\"detail\": \"This account " + lid + " is not active an may not create an ask.\",\n"
+      	  		+ "\"detail\": \"This account " + lid + " is not active an may not create a give.\",\n"
       	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
       	  		+ "\"instance\": \"/accounts/" + lid +"\"\n"
       	  		+ "}").build();
         }
         String id;
-        //String aid;
-        // calls the "Create Lamp" use case
-        Gson gs = new Gson();
-        Asks il = gs.fromJson(json, Gives.class);
-        Asks l = bi.createAsks(il);
         
-        //id = l.getUid();
-        id = l.getAid();
+        // calls the "Create Gives" use case
+        Gson gs = new Gson();
+        Gives il = gs.fromJson(json, Gives.class);
+        Gives l = bi.createGives(il);
+        
+        id = l.getGid();
         Gson gson = new Gson();
         String s = gson.toJson(l);
         // Build the URI for the "Location:" header
@@ -341,5 +340,77 @@ public class REST_controller {
         // The response includes header and body data
         return Response.created(builder.build()).entity(s).build();
     }
+    
+    @Path("/accounts/{uid}/gives/{gid}")
+    @PUT
+    public Response changeGive(@PathParam("uid") String lid,@PathParam("gid") String gid, String json) {
+        // call the "Update lamp" use case
+        Gson gson = new Gson();
+        Gives il = gson.fromJson(json, Gives.class);
+        bi.replaceGive(gid,il);//lid, 
+        //return Response.ok().build();
+        if(bi.isChangingGiveActiveStatus()) {
+      	  //return 400
+      	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
+      	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+      	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+      	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+      	  		+ "\"detail\": \"You may not use PUT to deactivate an ask, use GET /accounts/" + lid + "/asks/"+gid+"/deactivate instead\",\n"
+      	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+      	  		+ "\"instance\": \"/accounts/" + lid + "/asks/"+gid+"\"\n"
+      	  		+ "}").build();
+        }
+        
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+    
+    @Path("/gives/{gid}")
+    @GET
+    public Response getSpecificGive(@PathParam("gid") String lid) {
+        // call the "Get Account Detail" use case
+    	Gives l = bi.getGivesDetail(lid);
+        //Accounts l = bi.getAccountDetail(lid);
+        
+        if (l.isIs_Nil()) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } else {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(l);
+            return Response.ok(s).build();
+        }
+    }
+    
+    @Path("/accounts/{uid}/gives/{gid}/deactivate")
+    @GET
+    public Response getDeactivateGive(@PathParam("uid") String lid,@PathParam("gid") String gid) {
+        // call the "Get Account Detail" use case
+        Gives l = bi.deactivateGivesDetail(gid);
+        
+        if (l.isIs_Nil()) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + gid).build();
+        } else {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(l);
+            return Response.ok(s).build();
+        }
+    }
+    
+    @Path("/accounts/{uid}/gives/")
+    @GET
+    public Response getMyGives(@PathParam("uid") String lid, @QueryParam("is_active") String is_active) {
+        // call the "Get Account Detail" use case
+    	
+    	
+        List<Gives> l;
+        l = bi.searchGivesByUidAndActiveStatus(lid,is_active);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String s = gson.toJson(l);
+        return Response.ok(s).build();
+        
+    }
+    
 }
 

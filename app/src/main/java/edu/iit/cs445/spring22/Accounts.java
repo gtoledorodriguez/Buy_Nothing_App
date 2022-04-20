@@ -22,20 +22,6 @@ public class Accounts {
 		this.date_created = createDate();
 	}
 	
-//	public Accounts(String name, Address address, String phone, String picture, String is_active) {
-//		this.uid = UUID.randomUUID().toString();
-//		this.name = name;
-//		this.address = address;
-//		this.phone = phone;
-//		this.picture = picture;
-//		isNotActive() ;
-//		if(is_active == "true") {
-//			activate();
-//		}
-//		this.date_created = createDate();
-//		
-//	}
-	
 	public Accounts(Accounts acc) {
 		this.uid = UUID.randomUUID().toString();
 		this.name = acc.name;

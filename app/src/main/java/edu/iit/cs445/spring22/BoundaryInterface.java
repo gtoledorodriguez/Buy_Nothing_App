@@ -28,4 +28,13 @@ public interface BoundaryInterface {
 	List<Asks> searchAsksByUidAndActiveStatus(String lid, String b);
 	List<Asks> searchAsksByUidAndActiveStatusAndZipCodes(String lid, boolean b);
 	void deleteAsk(String lid);
+	
+	//GIVES
+	Gives createGives(Gives il);
+	void replaceGive(String gid, Gives il);
+	boolean isChangingGiveActiveStatus();
+	Gives getGivesDetail(String lid);
+	Gives deactivateGivesDetail(String gid);
+	List<Gives> getAllGives();
+	List<Gives> searchGivesByUidAndActiveStatus(String lid, String is_active);
 }

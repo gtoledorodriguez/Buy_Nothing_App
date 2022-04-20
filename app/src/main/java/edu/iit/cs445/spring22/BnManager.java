@@ -18,10 +18,15 @@ import com.google.gson.Gson;
 public class BnManager implements BoundaryInterface {
 	private static List<Accounts> accounts = new ArrayList<Accounts>();
 	private static List<Asks> asks = new ArrayList<Asks>();
+	private static List<Gives> gives = new ArrayList<Gives>();
+	
 	private boolean inAccountsList = false;
 	private boolean inAsksList = false;
+	private boolean inGivesList = false;
+	
 	private boolean changingActiveStatus = false;
 	private boolean changingAskActiveStatus = false;
+	private boolean changingGiveActiveStatus = false;
 	
 	//TODO: ACCOUNTS
 	public void preLoadAccountsList() {
@@ -224,10 +229,8 @@ public class BnManager implements BoundaryInterface {
 		this.changingAskActiveStatus = changingAskActiveStatus;
 	}
 	
-	public void replaceAsk(String aid, Asks il) {//String lid, 
-		//Will not active account
+	public void replaceAsk(String aid, Asks il) {
     	Asks l = findByAid(aid);
-//    	l.setUid(il.getUid());
 		l.setType(il.getType()); 
 		l.setDescription(il.getDescription());
 		l.setStart_date(il.getStart_date());
@@ -337,7 +340,97 @@ public class BnManager implements BoundaryInterface {
     	}
 		
 	}
+	
+	//TODO: GIVES
+	
+	@Override
+	public Gives createGives(Gives il) {
+		Gives l= new Gives(il);
+		gives.add(l);
+        return(l);
+	}
+	public boolean isChangingGiveActiveStatus() {
+		return changingGiveActiveStatus;
+	}
+	public void setChangingGiveActiveStatus(boolean changingGiveActiveStatus) {
+		this.changingGiveActiveStatus = changingGiveActiveStatus;
+	}
+	@Override
+	public void replaceGive(String gid, Gives il) {
+    	Gives l = findByGid(gid);
+		l.setType(il.getType()); 
+		l.setDescription(il.getDescription());
+		l.setStart_date(il.getStart_date());
+		l.setEnd_date(il.getEnd_date());
+		l.setExtra_zip(il.getExtra_zip());
+    	
+    	if(il.isIs_active()) {
+    		this.setChangingActiveStatus(true);
+    	}else {
+    		this.setChangingActiveStatus(false);
+    	}
+    	
+    	if(!isInGivesList()) {
+    		gives.add(l);
+    	}
+		
+	}
+	private Gives findByGid(String gid) {
+    	//System.out.println(lid);
+    	Iterator<Gives> li = gives.listIterator();
+        while(li.hasNext()) {
+        	Gives l = li.next();
+            if(l.matchesGid(gid)) {
+            	l.setIs_Nil(false);
+            	this.setInGivesList(true);
+            	return(l);
+            }
+        }
+        this.setInGivesList(false);
+        return (new NullGive());
+	}
+	public boolean isInGivesList() {
+		return inGivesList;
+	}
+	public void setInGivesList(boolean inGivesList) {
+		this.inGivesList = inGivesList;
+	}
+	@Override
+	public Gives getGivesDetail(String lid) {
+		return (findByGid(lid));
+	}
+	@Override
+	public Gives deactivateGivesDetail(String gid) {
+		Gives l = findByGid(gid);
+		l.setIs_active(false);
+        return l;
+	}
+	@Override
+	public List<Gives> searchGivesByUidAndActiveStatus(String lid, String is_active) {
+		List<Gives> searchGives = new ArrayList<Gives>();
+		List<Gives> allGives = this.getAllGives();
+		
+		for(int i = 0; i<allGives.size();i++) {
+			Gives l = allGives.get(i);
+			if(is_active!=null) {
+				if(l.getUid().equals(lid) && (l.isIs_active()== Boolean.parseBoolean(is_active))) {
+					searchGives.add(l);
+				}
+			}else {
+				if(l.getUid().equals(lid)) {
+					searchGives.add(l);
+				}
+			}
+			
+		}
+		return searchGives;
+	}
+	public List<Gives> getAllGives() {
+		// TODO Auto-generated method stub
+		return gives;
+	}
 
+	
 	
 
 }
