@@ -11,9 +11,18 @@ public class Thanks {
 	private String thank_to;
 	private String description;
 	private String date_created;
-
+	private boolean is_Nil = false;
+	
+	public Thanks() {
+		this.uid = "";
+		this.tid = UUID.randomUUID().toString();
+		this.thank_to = "";
+		this.description = "";
+		this.date_created = createDate();
+	}
+	
 	public Thanks(Thanks thank) {
-		this.uid = UUID.randomUUID().toString();
+		this.uid = thank.uid;
 		this.tid = UUID.randomUUID().toString();
 		this.thank_to = thank.thank_to;
 		this.description = thank.description;
@@ -59,5 +68,16 @@ public class Thanks {
 	    String formattedDate = myDateObj.format(myFormatObj);
 		return formattedDate;
 	}
+	
+
+	public boolean isIs_Nil() {
+		return is_Nil;
+	}
+	public void setIs_Nil(boolean is_Nil) {
+		this.is_Nil = is_Nil;
+	}
+	public boolean matchesTid(String tid) {
+        return(tid.equals(this.tid));
+    }
 
 }

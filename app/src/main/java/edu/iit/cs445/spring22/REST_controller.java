@@ -471,5 +471,127 @@ public class REST_controller {
         } 
     }
     
+    /**
+     * TODO: THANKS
+     */
+    @Path("/accounts/{uid}/thanks")
+    @POST
+    public Response makeThank(@Context UriInfo uriInfo, String json,@PathParam("uid") String lid) {
+    	System.out.println("makeThank");
+    	Accounts a = bi.getAccountDetail(lid);
+    	if(!a.getIsActive()) {
+      	  //return 400
+      	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
+      	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+      	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+      	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+      	  		+ "\"detail\": \"This account " + lid + " is not active an may not create a give.\",\n"
+      	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+      	  		+ "\"instance\": \"/accounts/" + lid +"\"\n"
+      	  		+ "}").build();
+        }
+        String id;
+        
+        // calls the "Create Gives" use case
+        Gson gs = new Gson();
+        Thanks il = gs.fromJson(json, Thanks.class);
+        Thanks l = bi.createThanks(il);
+        
+        id = l.getTid();
+        Gson gson = new Gson();
+        String s = gson.toJson(l);
+        // Build the URI for the "Location:" header
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.path(id.toString());
+
+        // The response includes header and body data
+        return Response.created(builder.build()).entity(s).build();
+    }
+    
+    @Path("/accounts/{uid}/thanks/{tid}")
+    @PUT
+    public Response changeThanks(@PathParam("uid") String lid,@PathParam("tid") String tid, String json) {
+        // call the "Update lamp" use case
+        Gson gson = new Gson();
+        Thanks il = gson.fromJson(json, Thanks.class);
+        bi.replaceThanks(tid,il);//lid, 
+        //return Response.ok().build();
+        if(il.getUid().isEmpty() || il.getThank_to().isEmpty() || il.getDescription().isEmpty()) {
+      	  //return 400
+      	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
+      	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+      	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+      	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+      	  		+ "\"detail\": \"Look at API documentation for more information\",\n"
+      	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+      	  		+ "\"instance\": \"/accounts/" + lid + "/thanks/"+tid+"\"\n"
+      	  		+ "}").build();
+        }
+        
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+    
+    @Path("/accounts/{uid}/thanks/")
+    @GET
+    public Response getMyThanks(@PathParam("uid") String lid) {
+        // call the "Get Account Detail" use case
+    	
+        List<Thanks> l = bi.searchThanksByUid(lid);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String s = gson.toJson(l);
+        return Response.ok(s).build();
+        
+    }
+    
+    @Path("/thanks/{tid}")
+    @GET
+    public Response getSpecificThanks(@PathParam("tid") String lid) {
+        // call the "Get Account Detail" use case
+    	Thanks l = bi.getThanksDetail(lid);
+        //Accounts l = bi.getAccountDetail(lid);
+        
+        if (l.isIs_Nil()) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } else {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(l);
+            return Response.ok(s).build();
+        }
+    }
+    
+    @Path("/thanks/")
+    @GET
+    public Response getAllThanks(@QueryParam("key") String key,@QueryParam("start_date") String start_date,@QueryParam("end_date") String end_date) {
+    	
+    	if(key!=null || (start_date!=null && end_date !=null)) {
+    		
+    		List<Thanks> searchAccs = bi.searchThanks(key, start_date, end_date);
+    		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(searchAccs);
+    		return Response.status(Response.Status.OK).entity(s).build();
+    	}else {
+	        // calls the "Get All Lamps" use case
+	        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	        List<Thanks> searchAccs = bi.getAllThanks();
+	        String s = gson.toJson(searchAccs);
+	        return Response.status(Response.Status.OK).entity(s).build();
+    	}
+        
+    }
+    
+    @Path("/thanks/received/{uid}")
+    @GET
+    public Response getAllThanksTo(@PathParam("uid") String lid) {
+    	
+    	List<Thanks> l = bi.searchThanksByThankTo(lid);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String s = gson.toJson(l);
+        return Response.ok(s).build();
+        
+    }
+    
 }
 

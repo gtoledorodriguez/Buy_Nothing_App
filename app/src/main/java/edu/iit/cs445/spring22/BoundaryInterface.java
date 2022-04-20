@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface BoundaryInterface {
 	
-	//ACCOUNTS
+	//TODO: ACCOUNTS
     List<Accounts> getAllAccounts();
     Accounts createAccounts(Accounts il);
 	void replaceAccount(String lid, Accounts il);
@@ -15,7 +15,7 @@ public interface BoundaryInterface {
 	List<Accounts> searchAccounts(String key, String start_date, String end_date);
 	void preLoadAccountsList();
 	
-	//ASKS
+	//TODO: ASKS
 	Asks createAsks(Asks il);
 	Asks getAskDetail(String lid);
 	boolean isChangingAskActiveStatus();
@@ -30,7 +30,7 @@ public interface BoundaryInterface {
 	void deleteAsk(String lid);
 	List<Asks> searchAsks(String key, String start_date, String end_date);
 	
-	//GIVES
+	//TODO: GIVES
 	Gives createGives(Gives il);
 	void replaceGive(String gid, Gives il);
 	boolean isChangingGiveActiveStatus();
@@ -45,4 +45,15 @@ public interface BoundaryInterface {
 	void deleteGive(String gid);
 	void deleteAccount(String uid);
 	List<Gives> searchGives(String key, String start_date, String end_date);
+	
+	//TODO: THANKS
+	Thanks createThanks(Thanks il);
+	void replaceThanks(String tid, Thanks il);
+	boolean isInThanksList();
+	void setInThanksList(boolean inThanksList);
+	Thanks getThanksDetail(String lid);
+	List<Thanks> getAllThanks();
+	List<Thanks> searchThanks(String key, String start_date, String end_date);
+	List<Thanks> searchThanksByUid(String lid);
+	List<Thanks> searchThanksByThankTo(String lid);
 }

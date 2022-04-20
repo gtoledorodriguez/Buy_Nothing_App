@@ -15,20 +15,21 @@ import java.util.UUID;
 import com.google.gson.Gson;
 
 
-
-
 public class BnManager implements BoundaryInterface {
 	private static List<Accounts> accounts = new ArrayList<Accounts>();
 	private static List<Asks> asks = new ArrayList<Asks>();
 	private static List<Gives> gives = new ArrayList<Gives>();
+	private static List<Thanks> thanks = new ArrayList<Thanks>();
 	
 	private boolean inAccountsList = false;
 	private boolean inAsksList = false;
 	private boolean inGivesList = false;
+	private boolean inThanksList = false;
 	
 	private boolean changingActiveStatus = false;
 	private boolean changingAskActiveStatus = false;
 	private boolean changingGiveActiveStatus = false;
+	private boolean changingThanksActiveStatus = false;
 	
 	//TODO: ACCOUNTS
 	public void preLoadAccountsList() {
@@ -490,9 +491,11 @@ public class BnManager implements BoundaryInterface {
 		}
 		return searchGives;
 	}
+	
 	public List<Gives> getAllGives() {
 		return gives;
 	}
+	
 	@Override
 	public List<Gives> searchGivesByUidAndActiveStatusAndZipCodes(String lid, String is_active) {
 		//view by user lid
@@ -596,6 +599,125 @@ public class BnManager implements BoundaryInterface {
 			
 		}
 		return searchGives;
+	}
+	
+	//TODO: THANKS
+	@Override
+	public Thanks createThanks(Thanks il) {
+		Thanks l= new Thanks(il);
+		thanks.add(l);
+        return(l);
+	}
+	@Override
+	public boolean isInThanksList() {
+		return inThanksList;
+	}
+	@Override
+	public void setInThanksList(boolean inThanksList) {
+		this.inThanksList = inThanksList;
+	}
+
+	@Override
+	public void replaceThanks(String tid, Thanks il) {
+		Thanks l = findByTid(tid);
+		l.setDescription(il.getDescription());
+		l.setThank_to(il.getThank_to());
+
+		if(!isInThanksList()) {
+		  thanks.add(l);
+		}
+		
+	}
+	private Thanks findByTid(String tid) {
+    	//System.out.println(lid);
+    	Iterator<Thanks> li = thanks.listIterator();
+        while(li.hasNext()) {
+        	Thanks l = li.next();
+            if(l.matchesTid(tid)) {
+            	l.setIs_Nil(false);
+            	this.setInGivesList(true);
+            	return(l);
+            }
+        }
+        this.setInGivesList(false);
+        return (new NullThanks());
+	}
+	@Override
+	public Thanks getThanksDetail(String lid) {
+		return (findByTid(lid));
+	}
+	@Override
+	public List<Thanks> getAllThanks() {
+		return thanks;
+	}
+	@Override
+	public List<Thanks> searchThanks(String key, String start_date, String end_date) {
+		List<Thanks> searchAccs = new ArrayList<Thanks>();
+		List<Thanks> allAccs = this.getAllThanks();
+		
+		for(int i = 0; i<allAccs.size();i++) {
+			
+			Thanks l = allAccs.get(i);
+
+			String description = l.getDescription();
+			String date = l.getDate_created();
+			
+			if(key!=null) {
+				key = key.toLowerCase();
+			}
+			
+			if(start_date!=null && end_date!=null) {
+				try {
+	            	Date date1= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date);
+					Date startDate= new SimpleDateFormat("dd-MMM-yyyy").parse(start_date);
+					Date endDate= new SimpleDateFormat("dd-MMM-yyyy").parse(end_date);
+					
+					if((!(date1.before(startDate) || date1.after(endDate))) && key!=null) {
+						if(description.contains(key)) {
+	        				searchAccs.add(l);
+	        			}
+					}else if(!(date1.before(startDate) || date1.after(endDate))) {
+						searchAccs.add(l);
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} 
+			}else {
+				if(key!=null && description.contains(key)) {
+    				searchAccs.add(l);
+    			}
+			}
+			
+		}
+		return searchAccs;
+	}
+	@Override
+	public List<Thanks> searchThanksByUid(String lid) {
+		List<Thanks> searchThanks = new ArrayList<Thanks>();
+		List<Thanks> allThanks = this.getAllThanks();
+		
+		for(int i = 0; i<allThanks.size();i++) {
+			Thanks l = allThanks.get(i);
+			if(l.getUid().equals(lid)) {
+				searchThanks.add(l);
+			}
+			
+		}
+		return searchThanks;
+	}
+	@Override
+	public List<Thanks> searchThanksByThankTo(String lid) {
+		List<Thanks> searchThanks = new ArrayList<Thanks>();
+		List<Thanks> allThanks = this.getAllThanks();
+		
+		for(int i = 0; i<allThanks.size();i++) {
+			Thanks l = allThanks.get(i);
+			if(l.getThank_to().equals(lid)) {
+				searchThanks.add(l);
+			}
+			
+		}
+		return searchThanks;
 	}
 
 	
