@@ -225,15 +225,25 @@ public class REST_controller {
     public Response getMyAsks(@PathParam("uid") String lid, @QueryParam("is_active") String is_active) {
         // call the "Get Account Detail" use case
     	
+//        List<Asks> l;
+//        boolean b;
+//        if(is_active!=null) {
+//        	b = Boolean.parseBoolean(is_active);
+//        	
+//        }else {
+//        	b = false;
+//        }
+//        l = bi.searchAsksByUidAndActiveStatus(lid,b);
+    	
         List<Asks> l;
-        boolean b;
-        if(is_active!=null) {
-        	b = Boolean.parseBoolean(is_active);
-        	
-        }else {
-        	b = false;
-        }
-        l = bi.searchAsksByUidAndActiveStatus(lid,b);//else {
+//        boolean b;
+//        if(is_active!=null) {
+//        	b = Boolean.parseBoolean(is_active);
+//        	
+//        }else {
+//        	b = false;
+//        }
+        l = bi.searchAsksByUidAndActiveStatus(lid,is_active);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String s = gson.toJson(l);
@@ -272,12 +282,19 @@ public class REST_controller {
         	b = false;
         }
         if(lid != null) {
-        	l = bi.searchAsksByUidAndActiveStatus(lid,b);
+        	l = bi.searchAsksByUidAndActiveStatusAndZipCodes(lid,b);
         	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
         		l = bi.getAllAsks();
         	}
         }else {
-        	l = bi.getAllAsks();
+        	l = new ArrayList<Asks>();
+        	return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+          	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+          	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+          	  		+ "\"detail\": \"Missing query string, please consult the API documentation\",\n"
+          	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+          	  		+ "\"instance\": \"asks\"\n"
+          	  		+ "}").build();
         	
         }
 
@@ -287,5 +304,42 @@ public class REST_controller {
         
     }
     
+    /**
+     * TODO: GIVES
+     */
+    @Path("/accounts/{uid}/asks")
+    @POST
+    public Response makeGive(@Context UriInfo uriInfo, String json,@PathParam("uid") String lid) {
+    	System.out.println("makeGive");
+    	Accounts a = bi.getAccountDetail(lid);
+    	if(!a.getIsActive()) {
+      	  //return 400
+      	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
+      	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+      	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+      	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+      	  		+ "\"detail\": \"This account " + lid + " is not active an may not create an ask.\",\n"
+      	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+      	  		+ "\"instance\": \"/accounts/" + lid +"\"\n"
+      	  		+ "}").build();
+        }
+        String id;
+        //String aid;
+        // calls the "Create Lamp" use case
+        Gson gs = new Gson();
+        Asks il = gs.fromJson(json, Gives.class);
+        Asks l = bi.createAsks(il);
+        
+        //id = l.getUid();
+        id = l.getAid();
+        Gson gson = new Gson();
+        String s = gson.toJson(l);
+        // Build the URI for the "Location:" header
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.path(id.toString());
+
+        // The response includes header and body data
+        return Response.created(builder.build()).entity(s).build();
+    }
 }
 

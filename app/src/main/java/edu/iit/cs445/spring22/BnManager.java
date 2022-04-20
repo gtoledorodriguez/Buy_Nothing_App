@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -225,7 +227,7 @@ public class BnManager implements BoundaryInterface {
 	public void replaceAsk(String aid, Asks il) {//String lid, 
 		//Will not active account
     	Asks l = findByAid(aid);
-    	l.setUid(il.getUid());
+//    	l.setUid(il.getUid());
 		l.setType(il.getType()); 
 		l.setDescription(il.getDescription());
 		l.setStart_date(il.getStart_date());
@@ -261,14 +263,14 @@ public class BnManager implements BoundaryInterface {
 	}
 
 	@Override
-	public List<Asks> searchAsksByUidAndActiveStatus(String lid, boolean b) {
+	public List<Asks> searchAsksByUidAndActiveStatus(String lid, String b) {
 		List<Asks> searchAsks = new ArrayList<Asks>();
 		List<Asks> allAsks = this.getAllAsks();
 		
 		for(int i = 0; i<allAsks.size();i++) {
 			Asks l = allAsks.get(i);
-			if(b) {
-				if(l.getUid().equals(lid) && l.isIs_active()) {
+			if(b!=null) {
+				if(l.getUid().equals(lid) && (l.isIs_active()== Boolean.parseBoolean(b))) {
 					searchAsks.add(l);
 				}
 			}else {
@@ -277,6 +279,50 @@ public class BnManager implements BoundaryInterface {
 				}
 			}
 			
+		}
+		return searchAsks;
+	}
+	
+	public List<Asks> searchAsksByUidAndActiveStatusAndZipCodes(String lid, boolean b) {
+		List<Asks> searchAsks = new ArrayList<Asks>();
+		List<Asks> allAsks = this.getAllAsks();
+		List<Accounts> allAccounts = this.getAllAccounts();
+		Accounts userView = new Accounts();
+		
+		for(int i = 0; i<allAccounts.size();i++) {
+			Accounts l = allAccounts.get(i);
+			if(l.getUid().equals(lid)) {
+				userView = l;
+				break;
+			}
+			//userIDWZipCode.put(l.getUid(), l.getAddress().getZip());
+		}
+		
+		String zip = userView.getAddress().getZip();
+		
+		for(int i = 0; i<allAsks.size();i++) {
+			Asks l = allAsks.get(i);
+
+				for(int j = 0; j<l.getExtra_zip().length; j++) {
+					if(b) {
+						if(l.isIs_active() && (zip.equals(l.getExtra_zip()[j]))) {
+							searchAsks.add(l);
+						}
+					}else {
+						if((zip.equals(l.getExtra_zip()[j]))) {
+							searchAsks.add(l);
+						}
+					}
+//					if(b && (zip==l.getExtra_zip()[j]) && l.isIs_active()) {
+//						searchAsks.add(l);
+//					}else {
+//						if((zip==l.getExtra_zip()[j])) {
+//							searchAsks.add(l);
+//						}
+//					}
+				}
+
+
 		}
 		return searchAsks;
 	}

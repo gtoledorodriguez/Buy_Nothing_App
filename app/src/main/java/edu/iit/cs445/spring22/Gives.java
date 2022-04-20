@@ -14,10 +14,17 @@ public class Gives {
 	private String[] extra_zip;
 	private boolean is_active;
 	private String date_created;
+	private boolean is_Nil = false;
 	
-
+	public Gives() {
+		this.gid = UUID.randomUUID().toString();
+		this.extra_zip = new String[0];
+		this.is_active = true;
+		this.date_created = createDate();
+		
+	}
 	public Gives(Gives gives) {
-		this.uid = UUID.randomUUID().toString();
+		this.uid = gives.getUid();
 		this.gid = UUID.randomUUID().toString();
 		this.type = gives.type;
 		this.description = gives.description;
@@ -110,5 +117,14 @@ public class Gives {
 	    String formattedDate = myDateObj.format(myFormatObj);
 		return formattedDate;
 	}
+	public boolean isIs_Nil() {
+		return is_Nil;
+	}
+	public void setIs_Nil(boolean is_Nil) {
+		this.is_Nil = is_Nil;
+	}
+	public boolean matchesGid(String gid) {
+        return(gid.equals(this.gid));
+    }
 
 }

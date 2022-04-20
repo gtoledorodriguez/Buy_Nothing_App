@@ -19,6 +19,8 @@ public class Asks {
 	public Asks() {
 		this.aid = UUID.randomUUID().toString();
 		this.date_created = createDate();
+		this.extra_zip = new String[0];
+		this.is_active = true;
 	}
 
 	public Asks(Asks ask) {
@@ -37,16 +39,12 @@ public class Asks {
 		return uid;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
+//	public void setUid(String uid) {
+//		this.uid = uid;
+//	}
 
 	public String getAid() {
 		return aid;
-	}
-
-	public void setAid(String aid) {
-		this.aid = aid;
 	}
 
 	public String getType() {
@@ -101,9 +99,6 @@ public class Asks {
 		return date_created;
 	}
 
-	public void setDate_created(String date_created) {
-		this.date_created = date_created;
-	}
 	
 	public String createDate() {
 		LocalDateTime myDateObj = LocalDateTime.now();
