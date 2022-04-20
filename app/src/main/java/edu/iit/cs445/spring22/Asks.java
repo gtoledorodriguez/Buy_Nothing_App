@@ -22,6 +22,10 @@ public class Asks {
 		this.date_created = createDate();
 		this.extra_zip = new String[0];
 		this.is_active = true;
+		this.type = "";
+		this.description = "";
+		this.start_date = "";
+		this.end_date = "";
 	}
 
 	public Asks(Asks ask) {

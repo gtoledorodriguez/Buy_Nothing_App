@@ -10,6 +10,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 
@@ -198,6 +199,19 @@ public class BnManager implements BoundaryInterface {
 		}
 		return searchAccs;
 	}
+	
+
+	@Override
+	public void deleteAccount(String uid) {
+
+    	Accounts l = findByUid(uid);
+    	if (l.isNil()) {
+    		throw new NoSuchElementException();
+    	} else {
+    		accounts.remove(l);
+    	}
+		
+	}
 
 	//TODO: ASKS
 	public Asks createAsks(Asks il) {
@@ -332,40 +346,6 @@ public class BnManager implements BoundaryInterface {
 			
 		}
 		return searchAsks;
-//		List<Asks> searchAsks = new ArrayList<Asks>();
-//		List<Asks> allAsks = this.getAllAsks();
-//		List<Accounts> allAccounts = this.getAllAccounts();
-//		Accounts userView = new Accounts();
-//		
-//		for(int i = 0; i<allAccounts.size();i++) {
-//			Accounts l = allAccounts.get(i);
-//			if(l.getUid().equals(lid)) {
-//				userView = l;
-//				break;
-//			}
-//
-//		}
-//		
-//		String zip = userView.getAddress().getZip();
-//		
-//		for(int i = 0; i<allAsks.size();i++) {
-//			Asks l = allAsks.get(i);
-//
-//				for(int j = 0; j<l.getExtra_zip().length; j++) {
-//					if(b) {
-//						if(l.isIs_active() && (zip.equals(l.getExtra_zip()[j]))) {
-//							searchAsks.add(l);
-//						}
-//					}else {
-//						if((zip.equals(l.getExtra_zip()[j]))) {
-//							searchAsks.add(l);
-//						}
-//					}
-//				}
-//
-//
-//		}
-//		return searchAsks;
 	}
 	@Override
 	public void deleteAsk(String lid) {
@@ -377,6 +357,53 @@ public class BnManager implements BoundaryInterface {
     		asks.remove(l);
     	}
 		
+	}
+
+	@Override
+	public List<Asks> searchAsks(String key, String start_date, String end_date) {
+		List<Asks> searchAsks = new ArrayList<Asks>();
+		List<Asks> allAsks = this.getAllAsks();
+		
+		for(int i = 0; i<allAsks.size();i++) {
+			
+			Asks l = allAsks.get(i);
+			
+			String type = l.getType().toLowerCase();
+			String description = l.getDescription().toLowerCase();
+			String start_dateGive = l.getStart_date().toLowerCase();
+			String end_dateGive = l.getEnd_date().toLowerCase();
+			String[] extra_zip = l.getExtra_zip();
+			String date = l.getDate_created();
+			List<String> zip = new ArrayList<String>();
+			zip.addAll(Arrays.asList(extra_zip ));
+			if(key!=null) {
+				key = key.toLowerCase();
+			}
+			
+			if(start_date!=null && end_date!=null) {
+				try {
+	            	Date date1= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date);
+					Date startDate= new SimpleDateFormat("dd-MMM-yyyy").parse(start_date);
+					Date endDate= new SimpleDateFormat("dd-MMM-yyyy").parse(end_date);
+					
+					if((!(date1.before(startDate) || date1.after(endDate))) && key!=null) {
+						if(type.contains(key) || description.contains(key)|| start_dateGive.contains(key) || end_dateGive.contains(key) || zip.contains(key)) {
+	        				searchAsks.add(l);
+	        			}
+					}else if(!(date1.before(startDate) || date1.after(endDate))) {
+						searchAsks.add(l);
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} 
+			}else {
+				if(type.contains(key) || description.contains(key)|| start_dateGive.contains(key) || end_dateGive.contains(key) || zip.contains(key)) {
+    				searchAsks.add(l);
+    			}
+			}
+			
+		}
+		return searchAsks;
 	}
 	
 	//TODO: GIVES
@@ -508,6 +535,63 @@ public class BnManager implements BoundaryInterface {
 					}
 				}
 				
+			}
+			
+		}
+		return searchGives;
+	}
+	@Override
+	public void deleteGive(String gid) {
+
+    	Gives l = findByGid(gid);
+    	if (l.isIs_Nil()) {
+    		throw new NoSuchElementException();
+    	} else {
+    		gives.remove(l);
+    	}
+		
+	}
+	@Override
+	public List<Gives> searchGives(String key, String start_date, String end_date) {
+		List<Gives> searchGives = new ArrayList<Gives>();
+		List<Gives> allGives = this.getAllGives();
+		
+		for(int i = 0; i<allGives.size();i++) {
+			
+			Gives l = allGives.get(i);
+			
+			String type = l.getType().toLowerCase();
+			String description = l.getDescription().toLowerCase();
+			String start_dateGive = l.getStart_date().toLowerCase();
+			String end_dateGive = l.getEnd_date().toLowerCase();
+			String[] extra_zip = l.getExtra_zip();
+			String date = l.getDate_created();
+			List<String> zip = new ArrayList<String>();
+			zip.addAll(Arrays.asList(extra_zip ));
+			if(key!=null) {
+				key = key.toLowerCase();
+			}
+			
+			if(start_date!=null && end_date!=null) {
+				try {
+	            	Date date1= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date);
+					Date startDate= new SimpleDateFormat("dd-MMM-yyyy").parse(start_date);
+					Date endDate= new SimpleDateFormat("dd-MMM-yyyy").parse(end_date);
+					
+					if((!(date1.before(startDate) || date1.after(endDate))) && key!=null) {
+						if(type.contains(key) || description.contains(key)|| start_dateGive.contains(key) || end_dateGive.contains(key) || zip.contains(key)) {
+	        				searchGives.add(l);
+	        			}
+					}else if(!(date1.before(startDate) || date1.after(endDate))) {
+						searchGives.add(l);
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} 
+			}else {
+				if(type.contains(key) || description.contains(key)|| start_dateGive.contains(key) || end_dateGive.contains(key) || zip.contains(key)) {
+    				searchGives.add(l);
+    			}
 			}
 			
 		}

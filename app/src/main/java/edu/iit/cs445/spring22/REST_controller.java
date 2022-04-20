@@ -125,6 +125,23 @@ public class REST_controller {
         }
     }
     
+    @Path("/accounts/{uid}")
+    @DELETE
+    public Response deleteAccount(@PathParam("uid") String lid) {
+        // call the "Delete Lamp" use case
+    	try {
+    		bi.deleteAccount(lid);
+    		// return a 204
+    	    return Response.status(Response.Status.NO_CONTENT).build();
+    		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            //String s = gson.toJson(l);
+            //return Response.ok(s).build();
+    	} catch (Exception e) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } 
+    }
+    
     /**
      * TODO: ASKS
      */
@@ -225,24 +242,8 @@ public class REST_controller {
     public Response getMyAsks(@PathParam("uid") String lid, @QueryParam("is_active") String is_active) {
         // call the "Get Account Detail" use case
     	
-//        List<Asks> l;
-//        boolean b;
-//        if(is_active!=null) {
-//        	b = Boolean.parseBoolean(is_active);
-//        	
-//        }else {
-//        	b = false;
-//        }
-//        l = bi.searchAsksByUidAndActiveStatus(lid,b);
-    	
         List<Asks> l;
-//        boolean b;
-//        if(is_active!=null) {
-//        	b = Boolean.parseBoolean(is_active);
-//        	
-//        }else {
-//        	b = false;
-//        }
+
         l = bi.searchAsksByUidAndActiveStatus(lid,is_active);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -253,7 +254,7 @@ public class REST_controller {
 
     @Path("/accounts/{uid}/asks/{aid}")
     @DELETE
-    public Response deleteAsk(@PathParam("id") String lid,@PathParam("aid") String aid) {
+    public Response deleteAsk(@PathParam("uid") String lid,@PathParam("aid") String aid) {
         // call the "Delete Lamp" use case
     	try {
     		bi.deleteAsk(aid);
@@ -270,18 +271,24 @@ public class REST_controller {
     
     @Path("/asks/")
     @GET
-    public Response getAllAsks(@QueryParam("v_by") String lid, @QueryParam("is_active") String is_active) {
+    public Response getAllAsks(@QueryParam("v_by") String lid, @QueryParam("is_active") String is_active, @QueryParam("key") String key,@QueryParam("start_date") String start_date,@QueryParam("end_date") String end_date) {
         // call the "Get Account Detail" use case
     	
         List<Asks> l;
-        boolean b;
-        if(is_active!=null) {
-        	b = Boolean.parseBoolean(is_active);
-        	
-        }else {
-        	b = false;
-        }
-        if(lid != null) {
+//        boolean b;
+//        if(is_active!=null) {
+//        	b = Boolean.parseBoolean(is_active);
+//        	
+//        }else {
+//        	b = false;
+//        }
+        if(key!=null || (start_date!=null && end_date !=null)) {
+    		
+    		List<Asks> searchAsks = bi.searchAsks(key, start_date, end_date);
+    		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(searchAsks);
+    		return Response.status(Response.Status.OK).entity(s).build();
+    	}else if(lid != null) {
         	l = bi.searchAsksByUidAndActiveStatusAndZipCodes(lid,is_active);
 //        	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
 //        		l = bi.getAllAsks();
@@ -414,11 +421,17 @@ public class REST_controller {
     
     @Path("/gives/")
     @GET
-    public Response getAllGives(@QueryParam("v_by") String lid, @QueryParam("is_active") String is_active) {
+    public Response getAllGives(@QueryParam("v_by") String lid, @QueryParam("is_active") String is_active, @QueryParam("key") String key,@QueryParam("start_date") String start_date,@QueryParam("end_date") String end_date) {
         // call the "Get Account Detail" use case
     	
         List<Gives> l;
-        if(lid != null) {
+        if(key!=null || (start_date!=null && end_date !=null)) {
+    		
+    		List<Gives> searchAsks = bi.searchGives(key, start_date, end_date);
+    		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(searchAsks);
+    		return Response.status(Response.Status.OK).entity(s).build();
+    	}else if(lid != null) {
         	l = bi.searchGivesByUidAndActiveStatusAndZipCodes(lid,is_active);
 //        	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
 //        		l = bi.getAllGives();
@@ -439,6 +452,23 @@ public class REST_controller {
         String s = gson.toJson(l);
         return Response.ok(s).build();
         
+    }
+    
+    @Path("/accounts/{uid}/gives/{gid}")
+    @DELETE
+    public Response deleteGive(@PathParam("uid") String lid,@PathParam("gid") String gid) {
+        // call the "Delete Lamp" use case
+    	try {
+    		bi.deleteGive(gid);
+    		// return a 204
+    	    return Response.status(Response.Status.NO_CONTENT).build();
+    		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            //String s = gson.toJson(l);
+            //return Response.ok(s).build();
+    	} catch (Exception e) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } 
     }
     
 }

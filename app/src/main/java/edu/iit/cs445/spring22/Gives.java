@@ -22,6 +22,10 @@ public class Gives {
 		this.extra_zip = new String[0];
 		this.is_active = true;
 		this.date_created = createDate();
+		this.type = "";
+		this.description = "";
+		this.start_date = "";
+		this.end_date = "";
 		
 	}
 	public Gives(Gives gives) {

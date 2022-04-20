@@ -300,6 +300,128 @@ class JunitTesting {
 		boolean b = a.matchesAid("");
 		assertEquals(b, false);
 	}
+
+	/*
+	 * TODO: GIVES
+	 */
+	
+	@Test
+	void testNullGives() {
+		Gives a = new NullGive();
+		Gives a2 = new Gives(a);
+		assertEquals(a2.isIs_Nil(), false);
+	}
+	
+	@Test
+	void testSetterGives() {
+		Gives a = new NullGive();
+		a.setDescription("Test");
+		a.setEnd_date("4/20/2022");
+		a.setExtra_zip(new String[0]);
+		a.setIs_active(false);
+		a.setIs_Nil(true);
+		a.setStart_date("4/19/2022");
+		a.setType("gift");
+		assertEquals(a.isIs_Nil(), true);
+	}
+	@Test
+	void testGetterDescriptionGives() {
+		Gives a = new NullGive();
+		a.setDescription("Test");
+		a.setEnd_date("4/20/2022");
+		a.setExtra_zip(new String[0]);
+		a.setIs_active(false);
+		a.setIs_Nil(true);
+		a.setStart_date("4/19/2022");
+		a.setType("gift");
+		assertEquals(a.getDescription(), "Test");
+	}
+	@Test
+	void testGetterEndGives() {
+		Gives a = new NullGive();
+		a.setDescription("Test");
+		a.setEnd_date("4/20/2022");
+		a.setExtra_zip(new String[0]);
+		a.setIs_active(false);
+		a.setIs_Nil(true);
+		a.setStart_date("4/19/2022");
+		a.setType("gift");
+		assertEquals(a.getEnd_date(), "4/20/2022");
+	}
+	@Test
+	void testGetterZipGives() {
+		Gives a = new NullGive();
+		a.setDescription("Test");
+		a.setEnd_date("4/20/2022");
+		a.setExtra_zip(new String[0]);
+		a.setIs_active(false);
+		a.setIs_Nil(true);
+		a.setStart_date("4/19/2022");
+		a.setType("gift");
+		assertEquals(a.getExtra_zip().length, 0);
+	}
+	@Test
+	void testGetterActiveGives() {
+		Gives a = new NullGive();
+		a.setDescription("Test");
+		a.setEnd_date("4/20/2022");
+		a.setExtra_zip(new String[0]);
+		a.setIs_active(false);
+		a.setIs_Nil(true);
+		a.setStart_date("4/19/2022");
+		a.setType("gift");
+		assertEquals(a.isIs_active(), false);
+	}
+	@Test
+	void testGetterStartGives() {
+		Gives a = new NullGive();
+		a.setDescription("Test");
+		a.setEnd_date("4/20/2022");
+		a.setExtra_zip(new String[0]);
+		a.setIs_active(false);
+		a.setIs_Nil(true);
+		a.setStart_date("4/19/2022");
+		a.setType("gift");
+		assertEquals(a.getStart_date(), "4/19/2022");
+	}
+	@Test
+	void testGetterTypeGives() {
+		Gives a = new NullGive();
+		a.setDescription("Test");
+		a.setEnd_date("4/20/2022");
+		a.setExtra_zip(new String[0]);
+		a.setIs_active(false);
+		a.setIs_Nil(true);
+		a.setStart_date("4/19/2022");
+		a.setType("gift");
+		assertEquals(a.getType(), "gift");
+	}
+	@Test
+	void testGetterUidGives() {
+		Gives a = new NullGive();
+		a.getUid();
+		assertEquals(a.getUid(), "");
+	}
+	@Test
+	void testGetterGidGives() {
+		Gives a = new NullGive();
+		a.getGid();
+		assertEquals(a.getGid(), a.getGid());
+	}
+	@Test
+	void testGetterCreateGives() {
+		Gives a = new NullGive();
+		a.createDate();
+		a.getDate_created();
+		assertEquals(a.getDate_created(), a.getDate_created());
+	}
+	@Test
+	void testMatchesGidGives() {
+		Gives a = new NullGive();
+		boolean b = a.matchesGid("");
+		assertEquals(b, false);
+	}
+	
 	/*
 	 * TODO: BNMANAGER - Accounts
 	 */
@@ -549,6 +671,16 @@ class JunitTesting {
 		List<Accounts> acc = bi.searchAccounts("jpeg", null, null);
         assertEquals(acc.size(),acc.size());
 	}
+	@Test 
+	void DELETEAccount(){
+		Accounts a = bi.createAccounts(new Accounts());
+		int size = bi.getAllAccounts().size();
+		String uid = a.getUid();
+		bi.deleteAccount(uid);
+		
+		assertEquals(bi.getAllAccounts().size(),size-1);
+	}
+	
 	/*
 	 * TODO: BNMANAGER - Asks
 	 */
@@ -711,6 +843,25 @@ class JunitTesting {
 		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), "false");
 		assertEquals(a2.getUid(),"11");
 	}
+	@Test 
+	void ViewUidActiveNullAsks(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"11\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+        Asks il = gs.fromJson(json, Asks.class);
+		Asks a2 = bi.createAsks(il);
+		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), "");
+		assertEquals(a2.getUid(),"11");
+	}
 	
 	@Test 
 	void lengthOfExtraZip(){
@@ -731,6 +882,476 @@ class JunitTesting {
 		System.out.println("ZIP: ");
 		System.out.println(a2.getExtra_zip().length!=0);
 		assertEquals(a2.getUid(),"11");
+	}
+	
+	@Test 
+	void ViewCSRUidActiveTrueAsks(){
+		bi.getAllAccounts();
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"23\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+        Asks il = gs.fromJson(json, Asks.class);
+		Asks a2 = bi.createAsks(il);
+		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(2).getUid(), "true");
+		assertEquals(a2.getUid(),a2.getUid());
+	}
+
+	@Test 
+	void ViewCSRUidActiveFalseAsks(){
+		bi.getAllAccounts();
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"24\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+        Asks il = gs.fromJson(json, Asks.class);
+		Asks a2 = bi.createAsks(il);
+		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(2).getUid(), "false");
+		assertEquals(a2.getUid(),a2.getUid());
+	}
+	@Test 
+	void ViewCSRUidActiveNullAsks(){
+		bi.getAllAccounts();
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"25\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+        Asks il = gs.fromJson(json, Asks.class);
+		Asks a2 = bi.createAsks(il);
+		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(2).getUid(), "");
+		assertEquals(a2.getUid(),a2.getUid());
+	}
+	
+	//TODO: Search Asks
+	String askJson = "{\n"
+			+ "	\"uid\": \""+bi.getAllAccounts().get(0).getUid() +"\",\n"
+			+ "	\"aid\": \"\",\n"
+			+ "  \"type\": \"gift\",\n"
+			+ "  \"description\": \"I need a twin bed frame with a spring box.\",\n"
+			+ "  \"start_date\": \"2022-03-14\",\n"
+			+ "  \"end_date\": \"\",\n"
+			+ "  \"extra_zip\": [\"60607\", \"60608\"],\n"
+			+ "  \"is_active\": true,\n"
+			+ "  \"date_created\": \"\"\n"
+			+ "}";
+	Gson gsAsk = new Gson();
+	Asks ilAsk = gsAsk.fromJson(askJson, Asks.class);
+	Asks lAsk = bi.createAsks(ilAsk);
+	String giveJson = "{\n"
+			+ "	\"uid\": \""+bi.getAllAccounts().get(0).getUid() +"\",\n"
+			+ "	\"gid\": \"\",\n"
+			+ "	\"type\": \"gift\",\n"
+			+ "	\"description\": \"Are you interested in a \", \n"
+			+ "	\"start_date\": \"2022-03-15\",\n"
+			+ "	\"end_date\": \"\",\n"
+			+ "	\"extra_zip\": [\"60607\", \"60608\"],\n"
+			+ "	\"is_active\": true,\n"
+			+ "	\"date_created\": \"\"\n"
+			+ "}";
+	Gson gsGive = new Gson();
+	Gives ilGive = gsGive.fromJson(giveJson, Gives.class);
+    Gives lGive = bi.createGives(ilGive);
+    
+  
+	@Test 
+	void searchAsksParamsZip(){
+		List<Asks> acc = bi.searchAsks("70616", null, null);
+        assertEquals(acc.size(),0);
+	}
+	@Test 
+	void searchAsksParamsZipStartEnd(){
+		List<Asks> acc = bi.searchAsks("60607", "31-Dec-2000", "31-Dec-2001");
+        assertEquals(acc.size(),0);
+	}
+	@Test 
+	void searchAsksParamsStartEnd(){
+		
+		List<Asks> acc = bi.searchAsks(null, "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAsksParamsTypeStartEnd(){
+		List<Asks> acc = bi.searchAsks("gift", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAsksParamsType(){
+		List<Asks> acc = bi.searchAsks("gift", null, null);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAsksParamsDesStartEnd(){
+		List<Asks> acc = bi.searchAsks("twin", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAsksDes(){
+		List<Asks> acc = bi.searchAsks("twin", null, null);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAsksParamsstartStartEnd(){
+		List<Asks> acc = bi.searchAsks("2022", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAsksstart(){
+		List<Asks> acc = bi.searchAsks("2022", null, null);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAsksParamsendStartEnd(){
+		List<Asks> acc = bi.searchAsks("", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchAsksend(){
+		List<Asks> acc = bi.searchAsks("", null, null);
+        assertEquals(acc.size(),acc.size());
+	}
+	
+	
+	/*
+	 * TODO: BNMANAGER - GIVES
+	 */
+	@Test 
+	void GETAllGives(){
+		List<Gives> aList= bi.getAllGives();
+		assertEquals(aList.size(),aList.size());
+	}
+	
+	@Test 
+	void inGivesListGives(){
+		bi.setInGivesList(false);
+		assertEquals(bi.isInGivesList(),false);
+	}
+	
+	@Test 
+	void inChangeAsksActiveGives(){
+		bi.setChangingGiveActiveStatus(false);
+		assertEquals(bi.isChangingGiveActiveStatus(),false);
+	}
+	@Test 
+	void specificGives(){
+		Gives a = bi.getGivesDetail("");
+		assertEquals(a.isIs_Nil(),true);
+	}
+	@Test 
+	void deactivateGives(){
+		bi.createGives(new Gives());
+		Gives a = bi.deactivateGivesDetail(bi.getAllGives().get(0).getGid());
+		assertEquals(a.isIs_active(),false);
+	}
+	
+	@Test 
+	void POSTGives(){
+		Gives a = bi.createGives(new Gives());
+		assertEquals(a.isIs_active(),true);
+	}
+	
+	@Test 
+	void DELETEGives(){
+		Gives a = bi.createGives(new Gives());
+		int size = bi.getAllGives().size();
+		String gid = a.getGid();
+		bi.deleteGive(gid);
+		
+		assertEquals(bi.getAllGives().size(),size-1);
+	}
+	@Test 
+	void ReplaceGives(){
+		Gives a2 = bi.createGives(new Gives());
+
+		Gives a = new NullGive();
+		a.setDescription("Test");
+		a.setEnd_date("4/20/2022");
+		a.setExtra_zip(new String[0]);
+		a.setIs_active(false);
+		a.setIs_Nil(true);
+		a.setStart_date("4/19/2022");
+		a.setType("gift");
+		
+		bi.replaceGive(a2.getGid(), a);
+		assertEquals(a2.getDescription(),"Test");
+	}
+	@Test 
+	void SearchUidActiveTrueGive(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"7\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		bi.searchAsksByUidAndActiveStatus(a2.getUid(), "true");
+		assertEquals(a2.getUid(),"7");
+	}
+
+	@Test 
+	void SearchUidActiveFalseGives(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"8\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		bi.searchGivesByUidAndActiveStatus(a2.getUid(), "false");
+		assertEquals(a2.getUid(),"8");
+	}
+
+	@Test 
+	void SearchUidActiveNullGives(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"9\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		bi.searchGivesByUidAndActiveStatus(a2.getUid(), null);
+		assertEquals(a2.getUid(),"9");
+	}
+	
+	@Test 
+	void ViewUidActiveTrueGives(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"10\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		bi.searchGivesByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), "true");
+		assertEquals(a2.getUid(),"10");
+	}
+
+	@Test 
+	void ViewUidActiveFalseGives(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"11\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		bi.searchGivesByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), "false");
+		assertEquals(a2.getUid(),"11");
+	}
+	@Test 
+	void ViewUidActiveNullGives(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"9\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		bi.searchGivesByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), "");
+		assertEquals(a2.getUid(),"9");
+	}
+	
+	@Test 
+	void lengthOfExtraZipGives(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"11\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		System.out.println("ZIP: ");
+		System.out.println(a2.getExtra_zip().length!=0);
+		assertEquals(a2.getUid(),"11");
+	}
+	
+	@Test 
+	void ViewCSRUidActiveTrueGives(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"20\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		bi.searchGivesByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(2).getUid(), "true");
+		assertEquals(a2.getUid(),a2.getUid());
+	}
+
+	@Test 
+	void ViewCSRUidActiveFalseGives(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"21\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		bi.searchGivesByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(2).getUid(), "false");
+		assertEquals(a2.getUid(),a2.getUid());
+	}
+	@Test 
+	void ViewCSRUidActiveNullGives(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"22\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+		Gives il = gs.fromJson(json, Gives.class);
+		Gives a2 = bi.createGives(il);
+		bi.searchGivesByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(2).getUid(), "");
+		assertEquals(a2.getUid(),a2.getUid());
+	}
+	
+	//TODO: Search Gives
+	@Test 
+	void searchGivesParamsZip(){
+		List<Gives> acc = bi.searchGives("70616", null, null);
+		assertEquals(acc.size(),0);
+	}
+	@Test 
+	void searchGivesParamsZipStartEnd(){
+		List<Gives> acc = bi.searchGives("60607", "31-Dec-2000", "31-Dec-2001");
+		assertEquals(acc.size(),0);
+	}
+	@Test 
+	void searchGivesParamsStartEnd(){
+		List<Gives> acc = bi.searchGives(null, "31-Dec-2000", "31-Dec-2022");
+		assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchGivesParamsTypeStartEnd(){
+		List<Gives> acc = bi.searchGives("gift", "31-Dec-2000", "31-Dec-2022");
+		assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchGivesParamsType(){
+		List<Gives> acc = bi.searchGives("gift", null, null);
+		assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchGivesParamsDesStartEnd(){
+		List<Gives> acc = bi.searchGives("interested", "31-Dec-2000", "31-Dec-2022");
+		assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchGivesDes(){
+		List<Gives> acc = bi.searchGives("interested", null, null);
+		assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchGivesParamsstartStartEnd(){
+		List<Gives> acc = bi.searchGives("2022", "31-Dec-2000", "31-Dec-2022");
+		assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchGivesstart(){
+		List<Gives> acc = bi.searchGives("2022", null, null);
+		assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchGivesParamsendStartEnd(){
+		List<Gives> acc = bi.searchGives("", "31-Dec-2000", "31-Dec-2022");
+		assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchGivesend(){
+		List<Gives> acc = bi.searchGives("", null, null);
+		assertEquals(acc.size(),acc.size());
 	}
 
 }
