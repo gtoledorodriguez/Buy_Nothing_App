@@ -429,6 +429,48 @@ public class BnManager implements BoundaryInterface {
 		// TODO Auto-generated method stub
 		return gives;
 	}
+	@Override
+	public List<Gives> searchGivesByUidAndActiveStatusAndZipCodes(String lid, String is_active) {
+		//view by user lid
+		List<Gives> searchGives = new ArrayList<Gives>();
+		List<Gives> allGives = this.getAllGives();
+		Accounts user = this.findByUid(lid);
+		String userZip = user.getAddress().getZip();
+		for(int i = 0; i<allGives.size();i++) {
+			Gives l = allGives.get(i);
+//			
+//			String[] zip = l.getExtra_zip();
+//			Accounts giveUser = this.findByUid(l.getUid());
+//			String giveZip = giveUser.getAddress().getZip();
+			
+			if(is_active!=null) {
+				if((l.isIs_active() == Boolean.parseBoolean(is_active))) {
+					if(l.getExtra_zip().length > 0) {//userZip.equals(giveZip)
+						searchGives.add(l);
+					}
+					
+//					for(int j = 0; j<zip.length;i++) {
+//						if(user.getAddress().getZip().equals(zip[j])) {
+//							searchGives.add(l);
+//							break;
+//						}
+//					}
+				}
+			}else {
+				if(l.getExtra_zip().length > 0) {//userZip.equals(giveZip)
+					searchGives.add(l);
+				}
+//				for(int j = 0; j<zip.length;i++) {
+//					if(user.getAddress().getZip().equals(zip[j])) {
+//						searchGives.add(l);
+//						break;
+//					}
+//				}
+			}
+			
+		}
+		return searchGives;
+	}
 
 	
 	

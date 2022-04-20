@@ -412,5 +412,34 @@ public class REST_controller {
         
     }
     
+    @Path("/gives/")
+    @GET
+    public Response getAllGives(@QueryParam("v_by") String lid, @QueryParam("is_active") String is_active) {
+        // call the "Get Account Detail" use case
+    	
+        List<Gives> l;
+        if(lid != null) {
+        	l = bi.searchGivesByUidAndActiveStatusAndZipCodes(lid,is_active);
+        	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
+        		l = bi.getAllGives();
+        	}
+        }else {
+        	l = new ArrayList<Gives>();
+        	return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+          	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+          	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+          	  		+ "\"detail\": \"Missing query string, please consult the API documentation\",\n"
+          	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+          	  		+ "\"instance\": \"asks\"\n"
+          	  		+ "}").build();
+        	
+        }
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String s = gson.toJson(l);
+        return Response.ok(s).build();
+        
+    }
+    
 }
 

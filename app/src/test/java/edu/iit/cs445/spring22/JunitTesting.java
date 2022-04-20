@@ -711,5 +711,26 @@ class JunitTesting {
 		bi.searchAsksByUidAndActiveStatusAndZipCodes(bi.getAllAccounts().get(0).getUid(), false);
 		assertEquals(a2.getUid(),"11");
 	}
+	
+	@Test 
+	void lengthOfExtraZip(){
+		Gson gs = new Gson();
+		String json = "{\n"
+				+ "      	\"uid\": \"11\",\n"
+				+ "        \"aid\": \"\",\n"
+				+ "      	\"type\": \"gift\",\n"
+				+ "        \"description\": \"I need a twin bed frame with a spring box.\",\n"
+				+ "        \"start_date\": \"2022-03-14\",\n"
+				+ "        \"end_date\": \"\",\n"
+				+ "        \"extra_zip\": [\"60607\", \"60608\"],\n"
+				+ "      	\"is_active\": true,\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "      }";
+        Asks il = gs.fromJson(json, Asks.class);
+		Asks a2 = bi.createAsks(il);
+		System.out.println("ZIP: ");
+		System.out.println(a2.getExtra_zip().length!=0);
+		assertEquals(a2.getUid(),"11");
+	}
 
 }

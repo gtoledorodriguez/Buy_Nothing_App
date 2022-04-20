@@ -37,4 +37,5 @@ public interface BoundaryInterface {
 	Gives deactivateGivesDetail(String gid);
 	List<Gives> getAllGives();
 	List<Gives> searchGivesByUidAndActiveStatus(String lid, String is_active);
+	List<Gives> searchGivesByUidAndActiveStatusAndZipCodes(String lid, String is_active);
 }
