@@ -859,6 +859,10 @@ public class BnManager implements BoundaryInterface {
 		}
 		return searchAccs;
 	}
+	@Override
+	public Notes getNotesDetail(String lid) {
+		return (findByNid(lid));
+	}
 
 	
 	

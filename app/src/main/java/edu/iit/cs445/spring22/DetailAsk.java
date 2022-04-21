@@ -11,6 +11,10 @@ public class DetailAsk {
 		this.inactive = da.inactive;
 	}
 
+	public DetailAsk() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getTotal() {
 		return total;
 	}

@@ -11,6 +11,10 @@ public class DetailGive {
 		this.inactive = dg.inactive;
 	}
 
+	public DetailGive() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getTotal() {
 		return total;
 	}

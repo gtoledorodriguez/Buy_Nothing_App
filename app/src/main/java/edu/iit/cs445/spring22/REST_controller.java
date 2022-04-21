@@ -670,6 +670,23 @@ public class REST_controller {
         } 
     }
     
+    @Path("/notes/{nid}")
+    @GET
+    public Response getSpecificNote(@PathParam("nid") String lid) {
+        // call the "Get Account Detail" use case
+    	Notes l = bi.getNotesDetail(lid);
+        //Accounts l = bi.getAccountDetail(lid);
+        
+        if (l.isIs_Nil()) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } else {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(l);
+            return Response.ok(s).build();
+        }
+    }
+    
     @Path("/notes/")
     @GET
     public Response getAllNotes(@QueryParam("c_by") String uid, @QueryParam("v_by") String to_user_id, @QueryParam("type") String type,@QueryParam("agid") String to_id) {

@@ -63,4 +63,5 @@ public interface BoundaryInterface {
 	void deleteNote(String lid);
 	List<Notes> getAllNotes();
 	List<Notes> searchNotes(String uid, String to_user_id, String type, String to_id);
+	Notes getNotesDetail(String lid);
 }

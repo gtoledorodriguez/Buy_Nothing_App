@@ -482,8 +482,74 @@ class JunitTesting {
 	}
 	
 	/*
+	 * TODO: NOTES
+	 */
+	
+	@Test
+	void testNullNotes() {
+		Notes a = new NullNotes();
+		Notes a2 = new Notes(a);
+		assertEquals(a2.isIs_Nil(), false);
+	}
+	
+	@Test
+	void testSetterNotes() {
+		Notes a = new NullNotes();
+		a.setIs_Nil(true);
+		a.setDescription("Test");
+		a.setTo_id(bi.getAllAsks().get(0).getUid());
+		a.setTo_type("gift");
+		a.setTo_user_id(bi.getAllAccounts().get(1).getUid());
+		a.getDate_created();
+		a.getDescription();
+		a.getNid();
+		a.getTo_id();
+		a.getTo_type();
+		a.getTo_user_id();
+		a.getUid();
+		assertEquals(a.isIs_Nil(), true);
+	}
+	
+	/*
+	 * TODO: REPORTS
+	 */
+	
+//	this.rid = UUID.randomUUID().toString();
+//	this.name = "";
+//	this.c_by = "";
+//	this.v_by = "";
+//	this.start_date = "";
+//	this.end_date = "";
+//	this.asks = "";
+//	this.gives = "";
+//	this.detail = new Detail[0];
+	
+	@Test
+	void testSetterReports() {
+		Reports a = new Reports();
+		a.getRid();
+		a.setName("Test");
+		a.getName();
+		a.setC_by("C");
+		a.getC_by();
+		a.setV_by("V");
+		a.getV_by();
+		a.setStart_date("mm/dd/yyyy");
+		a.getStart_date();
+		a.setEnd_date("mm/dd/yyyy");
+		a.getEnd_date();
+		a.setAsks("A");
+		a.getAsks();
+		a.setGives("G");
+		a.getGives();
+		a.setDetail(new Detail[0]);
+		assertEquals(a.getDetail().length, 0);
+	}
+	
+	/*
 	 * TODO: BNMANAGER - Accounts
 	 */
+	
 	BoundaryInterface bi = new BnManager();
 	
 	@Test
@@ -1627,6 +1693,345 @@ class JunitTesting {
 		Thanks l = bi.createThanks(il);
 		List<Thanks> acc = bi.searchThanksByThankTo("-1");
         assertEquals(acc.size(),0);
+	}
+	
+	/*
+	 * TODO: BNMANAGER - NOTES
+	 */
+	
+	@Test 
+	void GETAllNotes(){
+		List<Notes> aList= bi.getAllNotes();
+		assertEquals(aList.size(),aList.size());
+	}
+	
+	@Test 
+	void specificNotes(){
+		Notes a = bi.getNotesDetail("");
+		assertEquals(a.isIs_Nil(),true);
+	}
+	
+	@Test 
+	void POSTNotes(){
+		Notes a = bi.createNotes(new Notes());
+		boolean b = false;
+		List<Notes> tList = bi.getAllNotes();
+		for(int i = 0; i<tList.size(); i++) {
+			if(tList.get(i).getNid().equals(a.getNid())) {
+				b = true;
+			}
+		}
+		assertEquals(b,true);
+	}
+	
+	@Test 
+	void ReplaceNotes(){
+		Notes a2 = bi.createNotes(new Notes());
+
+		Notes a = new NullNotes();
+		a.setIs_Nil(true);
+		a.setDescription("Test");
+		a.setTo_id(bi.getAllAsks().get(0).getUid());
+		a.setTo_type("gift");
+		a.setTo_user_id(bi.getAllAccounts().get(1).getUid());
+		
+		bi.replaceNotes(a2.getNid(), a);
+		assertEquals(a2.getDescription(),"Test");
+	}
+	
+	@Test 
+	void searchNotesNoParams(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		List<Notes> acc = bi.searchNotes("", "", "", "");
+        assertEquals(acc.size(),0);
+	}
+	@Test 
+	void searchNotesParams13(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes(uid, tui, type, agid);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams12(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes(uid, tui, type, "");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams11(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes(uid, tui, "", agid);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams10(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes(uid, "", type, agid);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams9(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes("", tui, type, agid);
+        assertEquals(acc.size(),acc.size());
+	}
+	
+	@Test 
+	void searchNotesParams8(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes(uid, tui, "", "");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams7(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes(uid, "", "", agid);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams6(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes("", "", type, agid);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams5(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes("", tui, type, "");
+        assertEquals(acc.size(),acc.size());
+	}
+	
+	@Test 
+	void searchNotesParams4(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes(uid, "", "", "");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams3(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes("", tui, "", "");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams2(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes("","", type, "");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchNotesParams1(){
+		String noteJson = "{\n"
+				+ "      	\"uid\": \""+ bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"nid\": \"\",\n"
+				+ "        \"to_type\": \"give\",\n"
+				+ "        \"to_user_id\": \"" +bi.getAllGives().get(0).getUid()+"\",\n"
+				+ "      	\"to_id\": \""+bi.getAllGives().get(0).getGid()+"\",\n"
+				+ "        \"description\": \"Can I get braids this coming Monday?\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Notes il = gs.fromJson(noteJson, Notes.class);
+		bi.createNotes(il);
+		String uid = bi.getAllAccounts().get(0).getUid();
+		String agid = bi.getAllGives().get(0).getGid();
+		String tui = bi.getAllGives().get(0).getUid();
+		String type = "give";
+		List<Notes> acc = bi.searchNotes("", "","",agid);
+        assertEquals(acc.size(),acc.size());
 	}
 
 }

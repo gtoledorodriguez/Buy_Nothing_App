@@ -13,6 +13,18 @@ public class Reports {
 	private String asks;
 	private String gives;
 	private Detail[] detail;
+	
+	public Reports() {
+		this.rid = UUID.randomUUID().toString();
+		this.name = "";
+		this.c_by = "";
+		this.v_by = "";
+		this.start_date = "";
+		this.end_date = "";
+		this.asks = "";
+		this.gives = "";
+		this.detail = new Detail[0];
+	}
 
 	public Reports(Reports r) {
 		this.rid = UUID.randomUUID().toString();

@@ -4,6 +4,12 @@ public class Detail {
 	private String zip;
 	private DetailAsk asks;
 	private DetailGive gives;
+	
+	public Detail() {
+		this.zip = "";
+		this.asks = new DetailAsk();
+		this.gives = new DetailGive();
+	}
 
 	public Detail(Detail d) {
 		this.zip = d.zip;
