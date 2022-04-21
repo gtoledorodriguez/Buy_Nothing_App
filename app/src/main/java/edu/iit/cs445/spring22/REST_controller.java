@@ -629,5 +629,75 @@ public class REST_controller {
         // The response includes header and body data
         return Response.created(builder.build()).entity(s).build();
     }
+    
+    @Path("/notes/{nid}")
+    @PUT
+    public Response changeThanks(@PathParam("nid") String nid, String json) {
+        // call the "Update lamp" use case
+        Gson gson = new Gson();
+        Notes il = gson.fromJson(json, Notes.class);
+        bi.replaceNotes(nid,il);//lid, 
+        //return Response.ok().build();
+        if(il.getUid().isEmpty() || il.getTo_type().isEmpty() || il.getTo_user_id().isEmpty() || il.getTo_id().isEmpty() || il.getDescription().isEmpty()) {
+      	  //return 400
+      	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
+      	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+      	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+      	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+      	  		+ "\"detail\": \"Look at API documentation for more information\",\n"
+      	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+      	  		+ "\"instance\": \"/notes/" +nid+"\"\n"
+      	  		+ "}").build();
+        }
+        
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+    
+    @Path("/notes/{nid}")
+    @DELETE
+    public Response deleteNote(@PathParam("nid") String lid) {
+        // call the "Delete Lamp" use case
+    	try {
+    		bi.deleteNote(lid);
+    		// return a 204
+    	    return Response.status(Response.Status.NO_CONTENT).build();
+    		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            //String s = gson.toJson(l);
+            //return Response.ok(s).build();
+    	} catch (Exception e) {
+            // return a 404
+            return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + lid).build();
+        } 
+    }
+    
+    @Path("/notes/")
+    @GET
+    public Response getAllNotes(@QueryParam("c_by") String uid, @QueryParam("v_by") String to_user_id, @QueryParam("type") String type,@QueryParam("agid") String to_id) {
+        // call the "Get Account Detail" use case
+    	
+        List<Notes> l;
+        if(uid!=null || to_user_id!=null || type!=null || to_id!=null) {
+    		
+    		List<Notes> searchAsks = bi.searchNotes(uid,to_user_id,type,to_id);
+    		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String s = gson.toJson(searchAsks);
+    		return Response.status(Response.Status.OK).entity(s).build();
+//    	}else if(lid != null) {
+//        	l = bi.searchGivesByUidAndActiveStatusAndZipCodes(lid,is_active);
+////        	if(lid.equals(bi.getAllAccounts().get(2).getUid())) {
+////        		l = bi.getAllGives();
+////        	}
+        }else {
+        	l = bi.getAllNotes();
+        	
+        }
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String s = gson.toJson(l);
+        return Response.ok(s).build();
+        
+    }
+    
+    
 }
 

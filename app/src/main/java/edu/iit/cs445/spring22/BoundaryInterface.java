@@ -59,4 +59,8 @@ public interface BoundaryInterface {
 	
 	//TODO: Notes
 	Notes createNotes(Notes il);
+	void replaceNotes(String nid, Notes il);
+	void deleteNote(String lid);
+	List<Notes> getAllNotes();
+	List<Notes> searchNotes(String uid, String to_user_id, String type, String to_id);
 }

@@ -727,6 +727,138 @@ public class BnManager implements BoundaryInterface {
 		notes.add(l);
         return(l);
 	}
+	@Override
+	public void replaceNotes(String nid, Notes il) {
+		Notes l = findByNid(nid);
+//		this.uid = "";
+//		this.to_type = "";
+//		this.to_user_id = "";
+//		this.to_id = "";
+//		this.description = "";
+		l.setTo_type(il.getTo_type());
+		l.setTo_user_id(il.getTo_user_id());
+		l.setTo_id(il.getTo_id());
+		l.setDescription(il.getDescription());
+
+		if(!isInThanksList()) {
+		  notes.add(l);
+		}
+	}
+	private Notes findByNid(String nid) {
+    	//System.out.println(lid);
+    	Iterator<Notes> li = notes.listIterator();
+        while(li.hasNext()) {
+        	Notes l = li.next();
+            if(l.matchesNid(nid)) {
+            	l.setIs_Nil(false);
+            	this.setInGivesList(true);
+            	return(l);
+            }
+        }
+        this.setInGivesList(false);
+        return (new NullNotes());
+	}
+	@Override
+	public void deleteNote(String lid) {
+
+		Notes l = findByNid(lid);
+    	if (l.isIs_Nil()) {
+    		throw new NoSuchElementException();
+    	} else {
+    		notes.remove(l);
+    	}
+	}
+	@Override
+	public List<Notes> getAllNotes() {
+		return notes;
+	}
+	@Override
+	public List<Notes> searchNotes(String uid, String to_user_id, String type, String to_id) {
+		List<Notes> searchAccs = new ArrayList<Notes>();
+		List<Notes> allAccs = this.getAllNotes();
+//		List<String> types = new ArrayList<String>();
+//		types.add("ask");
+//		types.add("gives");
+		boolean a = !uid.isEmpty();
+		boolean b = !to_user_id.isEmpty();
+		boolean c = !type.isEmpty();
+		boolean d = !to_id.isEmpty();
+		
+		for(int i = 0; i<allAccs.size();i++) {
+			
+			Notes l = allAccs.get(i);
+			String lUnid = l.getUid();
+			String lToUserId = l.getTo_user_id();
+			String lType = l.getTo_type();
+			String lToId = l.getTo_id();
+			
+			if(a && b && c && d) {
+				if(lUnid.equals(uid) && lToUserId.equals(to_user_id) && (!lType.equals("notes") && lType.equals(type)) && lToId.equals(to_id)) {
+					searchAccs.add(l);
+				}
+			}else if(a && b && c) {
+				if(lUnid.equals(uid) && lToUserId.equals(to_user_id) && (!lType.equals("notes") && lType.equals(type))) {
+					searchAccs.add(l);
+				}
+				
+			}else if(a && b && d) {
+				if(lUnid.equals(uid) && lToUserId.equals(to_user_id) && lToId.equals(to_id)) {
+					searchAccs.add(l);
+				}
+				
+			}else if(a && c && d) {
+				if(lUnid.equals(uid) && (!lType.equals("notes") && lType.equals(type)) && lToId.equals(to_id)) {
+					searchAccs.add(l);
+				}
+				
+			}else if(b && c && d) {
+				if(lToUserId.equals(to_user_id) && (!lType.equals("notes") && lType.equals(type)) && lToId.equals(to_id)) {
+					searchAccs.add(l);
+				}
+				
+			}else if(a && b) {
+				if(lUnid.equals(uid) && lToUserId.equals(to_user_id)) {
+					searchAccs.add(l);
+				}
+			}else if(a && d) {
+				if(lUnid.equals(uid) && lToId.equals(to_id)) {
+					searchAccs.add(l);
+				}
+				
+			}else if(c && d) {
+				if((!lType.equals("notes") && lType.equals(type)) && lToId.equals(to_id)) {
+					searchAccs.add(l);
+				}
+				
+			}else if(b && c) {
+				if(lToUserId.equals(to_user_id) && (!lType.equals("notes") && lType.equals(type))) {
+					searchAccs.add(l);
+				}
+				
+			}else if(a) {
+				if(lUnid.equals(uid)) {
+					searchAccs.add(l);
+				}
+				
+			}else if(b) {
+				if(lToUserId.equals(to_user_id)) {
+					searchAccs.add(l);
+				}
+				
+			}else if(c) {
+				if((!lType.equals("notes") && lType.equals(type))) {
+					searchAccs.add(l);
+				}
+				
+			}else if(d) {
+				if(lToId.equals(to_id)) {
+					searchAccs.add(l);
+				}
+			}
+			
+		}
+		return searchAccs;
+	}
 
 	
 	
