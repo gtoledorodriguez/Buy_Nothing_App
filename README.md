@@ -64,13 +64,13 @@ cd /Buy_Nothing_App
 ```
 ./gradlew build
 ```
-You'll find basic coverage information under `lib/build/reports/tests/test/index.html`
+You'll find basic coverage information under `app/build/reports/tests/test/index.html`
 
 If you want detailed unit test coverage then execute the jacocoTestReport task:
 ```
 ./gradlew jacocoTestReport
 ```
-The html coverage report is available at `lib/build/reports/jacoco/test/html/index.html`
+The html coverage report is available at `app/build/reports/jacoco/test/html/index.html`
 
 (vii) Deployment instructions
 
@@ -78,6 +78,12 @@ The html coverage report is available at `lib/build/reports/jacoco/test/html/ind
 ```
 /opt/tomcat/bin/startup.sh
 ```
+For Tomcat Version 10.0.20, it may be
+```
+/opt/tomcat/apache-tomcat-10.0.20/bin/startup.sh
+```
+If still having trouble finding the starup.sh command, go to /opt/ and then delve into the folders until you arrive
+
 * Point your browser to `http://localhost:8080`, you should see the Tomcat banner page
 * Select Manager App; if you get an error you may have to edit `/opt/tomcat/conf/tomcat-users.xml`
 * Scroll down the page to the 'WAR file to deploy' section and Browse to the war file created by the 'build' task, should be at `lib/build/libs/rest-lamp.war`, select it and then press 'Open'
@@ -107,3 +113,6 @@ which will print both the response HTTP header and the body.
 ### Who do I talk to? ###
 
 * Email gtoledorodriguez@iit.edu
+
+### Known Problems
+Reports and Notes object functions were not fully implemented and as such Post man will 6 tests and partially fail 3 tests.
