@@ -593,5 +593,41 @@ public class REST_controller {
         
     }
     
+    /**
+     * TODO: NOTES
+     */
+    @Path("/notes")
+    @POST
+    public Response makeNote(@Context UriInfo uriInfo, String json) {
+    	System.out.println("makeNote");
+//    	Accounts a = bi.getAccountDetail(lid);
+//    	if(!a.getIsActive()) {
+//      	  //return 400
+//      	  //return Response.status(Response.Status.BAD_REQUEST).type("http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation").build();
+//      	  return Response.status(Response.Status.BAD_REQUEST).entity("{\n"
+//      	  		+ "\"type\": \"http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation\",\n"
+//      	  		+ "\"title\": \"Your request data didn\'t pass validation\",\n"
+//      	  		+ "\"detail\": \"This account " + lid + " is not active an may not create a give.\",\n"
+//      	  		+ "\"status\": "+ Response.Status.BAD_REQUEST.getStatusCode() +",\n"
+//      	  		+ "\"instance\": \"/accounts/" + lid +"\"\n"
+//      	  		+ "}").build();
+//        }
+        String id;
+        
+        // calls the "Create Gives" use case
+        Gson gs = new Gson();
+        Notes il = gs.fromJson(json, Notes.class);
+        Notes l = bi.createNotes(il);
+        
+        id = l.getNid();
+        Gson gson = new Gson();
+        String s = gson.toJson(l);
+        // Build the URI for the "Location:" header
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.path(id.toString());
+
+        // The response includes header and body data
+        return Response.created(builder.build()).entity(s).build();
+    }
 }
 

@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.swing.text.Position.Bias;
 
@@ -419,6 +420,64 @@ class JunitTesting {
 	void testMatchesGidGives() {
 		Gives a = new NullGive();
 		boolean b = a.matchesGid("");
+		assertEquals(b, false);
+	}
+	
+	/*
+	 * TODO: THANKS
+	 */
+	
+	@Test
+	void testNullThanks() {
+		Thanks a = new NullThanks();
+		Thanks a2 = new Thanks(a);
+		assertEquals(a2.isIs_Nil(), false);
+	}
+	
+	@Test
+	void testSetterThanks() {
+		Thanks a = new NullThanks();
+		a.setThank_to(bi.getAllAccounts().get(0).getUid());
+		a.setDescription("Test");
+		assertEquals(a.isIs_Nil(), true);
+	}
+	@Test
+	void testGetterDescriptionThanks() {
+		Thanks a = new NullThanks();
+		a.setThank_to(bi.getAllAccounts().get(0).getUid());
+		a.setDescription("Test");
+		assertEquals(a.getDescription(), "Test");
+	}
+	@Test
+	void testGetterEndThanks() {
+		Thanks a = new NullThanks();
+		a.setThank_to(bi.getAllAccounts().get(0).getUid());
+		a.setDescription("Test");
+		assertEquals(a.getThank_to(), bi.getAllAccounts().get(0).getUid());
+	}
+	@Test
+	void testGetterUidThanks() {
+		Thanks a = new NullThanks();
+		a.getUid();
+		assertEquals(a.getUid(), "");
+	}
+	@Test
+	void testGetterTidThanks() {
+		Thanks a = new NullThanks();
+		a.getTid();
+		assertEquals(a.getTid(), a.getTid());
+	}
+	@Test
+	void testGetterCreateThanks() {
+		Thanks a = new NullThanks();
+		a.createDate();
+		a.getDate_created();
+		assertEquals(a.getDate_created(), a.getDate_created());
+	}
+	@Test
+	void testMatchesTidThanks() {
+		Thanks a = new NullThanks();
+		boolean b = a.matchesTid("");
 		assertEquals(b, false);
 	}
 	
@@ -1352,6 +1411,222 @@ class JunitTesting {
 	void searchGivesend(){
 		List<Gives> acc = bi.searchGives("", null, null);
 		assertEquals(acc.size(),acc.size());
+	}
+	
+	/*
+	 * TODO: BNMANAGER - THANKS
+	 */
+	
+	@Test 
+	void GETAllThanks(){
+		List<Thanks> aList= bi.getAllThanks();
+		assertEquals(aList.size(),aList.size());
+	}
+	
+	@Test 
+	void inThanksListThanks(){
+		bi.setInThanksList(false);
+		assertEquals(bi.isInThanksList(),false);
+	}
+	
+	@Test 
+	void specificThanks(){
+		Thanks a = bi.getThanksDetail("");
+		assertEquals(a.isIs_Nil(),true);
+	}
+	
+	@Test 
+	void POSTThanks(){
+		Thanks a = bi.createThanks(new Thanks());
+		boolean b = false;
+		List<Thanks> tList = bi.getAllThanks();
+		for(int i = 0; i<tList.size(); i++) {
+			if(tList.get(i).getTid().equals(a.getTid())) {
+				b = true;
+			}
+		}
+		assertEquals(b,true);
+	}
+	
+	@Test 
+	void ReplaceThanks(){
+		Thanks a2 = bi.createThanks(new Thanks());
+
+		Thanks a = new NullThanks();
+		a.setDescription("Test");
+		a.setThank_to(bi.getAllAccounts().get(0).getUid());		
+		a.setIs_Nil(true);
+		
+		bi.replaceThanks(a2.getTid(), a);
+		assertEquals(a2.getDescription(),"Test");
+	}
+	
+	@Test 
+	void searchThanksNoParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanks(null, null, null);
+        assertEquals(acc.size(),0);
+	}
+	@Test 
+	void searchThanksKeyNoDateRangeParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanks("thank", null, null);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchThanksKeyNoStartParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanks("thank", null, "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchThanksKeyNoEndParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanks("thank", "31-Dec-2000", null);
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchThanksInvalidKeyAndDateRangeParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanks("hate", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchThanksKeyAndDateRangeParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanks("thank", "31-Dec-2000", "31-Dec-2022");
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchThanksKeyAndInvalidDateRangeParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanks("thank", "31-Dec-2000", "31-Dec-2001");
+        assertEquals(acc.size(),acc.size());
+	}
+	
+	@Test 
+	void searchThanksSearchByUidValidParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanksByUid(bi.getAllAccounts().get(0).getUid());
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchThanksSearchByUidInvalidParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanksByUid("-1");
+        assertEquals(acc.size(),0);
+	}
+	
+	@Test 
+	void searchThanksSearchByThanksToValidParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanksByThankTo(bi.getAllAccounts().get(1).getUid());
+        assertEquals(acc.size(),acc.size());
+	}
+	@Test 
+	void searchThanksSearchByThanksToInvalidParams(){
+		String thankJson = "{\n"
+				+ "      	\"uid\": \""+bi.getAllAccounts().get(0).getUid()+"\",\n"
+				+ "        \"tid\": \"\",\n"
+				+ "      	\"thank_to\": \"" + bi.getAllAccounts().get(1).getUid()+ "\",\n"
+				+ "        \"description\": \"Alice, thank you so much, I love my new braids.\",\n"
+				+ "        \"date_created\": \"\"\n"
+				+ "}";
+		Gson gs = new Gson();
+		Thanks il = gs.fromJson(thankJson, Thanks.class);
+		Thanks l = bi.createThanks(il);
+		List<Thanks> acc = bi.searchThanksByThankTo("-1");
+        assertEquals(acc.size(),0);
 	}
 
 }

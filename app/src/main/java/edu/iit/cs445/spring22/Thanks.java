@@ -37,10 +37,6 @@ public class Thanks {
 		return tid;
 	}
 
-	public void setTid(String tid) {
-		this.tid = tid;
-	}
-
 	public String getThank_to() {
 		return thank_to;
 	}

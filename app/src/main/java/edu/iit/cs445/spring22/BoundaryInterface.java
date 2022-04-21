@@ -56,4 +56,7 @@ public interface BoundaryInterface {
 	List<Thanks> searchThanks(String key, String start_date, String end_date);
 	List<Thanks> searchThanksByUid(String lid);
 	List<Thanks> searchThanksByThankTo(String lid);
+	
+	//TODO: Notes
+	Notes createNotes(Notes il);
 }

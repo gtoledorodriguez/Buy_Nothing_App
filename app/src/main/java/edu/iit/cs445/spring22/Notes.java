@@ -12,11 +12,23 @@ public class Notes {
 	private String to_id;
 	private String description;
 	private String date_created;
-
+	private boolean is_Nil = false;
+	
+	public Notes() {
+		this.uid = "";
+		this.nid = UUID.randomUUID().toString();
+		this.to_type = "";
+		this.to_user_id = "";
+		this.to_id = "";
+		this.description = "";
+		this.date_created = createDate();
+	}
+	
 	public Notes(Notes note) {
-		this.uid = UUID.randomUUID().toString();
+		this.uid = note.uid;
 		this.nid = UUID.randomUUID().toString();
 		this.to_type = note.to_type;
+		this.to_user_id = note.to_user_id;
 		this.to_id = note.to_id;
 		this.description = note.description;
 		this.date_created = createDate();
@@ -73,5 +85,15 @@ public class Notes {
 	    String formattedDate = myDateObj.format(myFormatObj);
 		return formattedDate;
 	}
+	
+	public boolean isIs_Nil() {
+		return is_Nil;
+	}
+	public void setIs_Nil(boolean is_Nil) {
+		this.is_Nil = is_Nil;
+	}
+	public boolean matchesNid(String nid) {
+        return(nid.equals(this.nid));
+    }
 
 }

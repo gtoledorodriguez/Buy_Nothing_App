@@ -20,6 +20,7 @@ public class BnManager implements BoundaryInterface {
 	private static List<Asks> asks = new ArrayList<Asks>();
 	private static List<Gives> gives = new ArrayList<Gives>();
 	private static List<Thanks> thanks = new ArrayList<Thanks>();
+	private static List<Notes> notes = new ArrayList<Notes>();
 	
 	private boolean inAccountsList = false;
 	private boolean inAsksList = false;
@@ -29,7 +30,6 @@ public class BnManager implements BoundaryInterface {
 	private boolean changingActiveStatus = false;
 	private boolean changingAskActiveStatus = false;
 	private boolean changingGiveActiveStatus = false;
-	private boolean changingThanksActiveStatus = false;
 	
 	//TODO: ACCOUNTS
 	public void preLoadAccountsList() {
@@ -70,16 +70,16 @@ public class BnManager implements BoundaryInterface {
 				+ "  \"is_active\": true,\n"
 				+ "  \"date_created\": \"\"\n"
 				+ "}";
-		String id;
+		
 		Gson gs = new Gson();
         Accounts il = gs.fromJson(json, Accounts.class);
-        Accounts l = this.createAccounts(il);
+        this.createAccounts(il);
         
         Accounts il2 = gs.fromJson(json2, Accounts.class);
-        Accounts l2 = this.createAccounts(il2);
+        this.createAccounts(il2);
         
         Accounts il3 = gs.fromJson(json3, Accounts.class);
-        Accounts l3 = this.createAccounts(il3);
+        this.createAccounts(il3);
         
         System.out.println(this.getAllAccounts().size());
 	}
@@ -718,6 +718,14 @@ public class BnManager implements BoundaryInterface {
 			
 		}
 		return searchThanks;
+	}
+	
+	//TODO: NOTES
+	@Override
+	public Notes createNotes(Notes il) {
+		Notes l= new Notes(il);
+		notes.add(l);
+        return(l);
 	}
 
 	
