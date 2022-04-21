@@ -1,4 +1,4 @@
-package edu.iit.cs445.spring22;
+package edu.iit.cs445.Rest;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
